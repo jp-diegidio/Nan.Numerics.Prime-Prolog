@@ -1,0 +1,45 @@
+Nan.Numerics.Prime 1.0-beta
+A simple prime number library
+Copyright 2016 Julio P. Di Egidio
+Licensed under GNU GPLv3.
+http://julio.diegidio.name/Projects/Nan.Numerics.Prime/
+https://github.com/jp-diegidio/Nan.Numerics.Prime-Prolog/
+
+The module =prime= provides predicates to test (positive integer) numbers
+for primality, find divisors and factor numbers, generate prime numbers in
+some interval, find consecutive prime numbers, and save/load all prime
+numbers up to some value to/from a file or stream.
+
+Implements a variant of the *Miller-Rabin* primality test that is
+_deterministic_ for numbers up to =3317044064679887385961980=, otherwise
+it is _probabilistic_ with the number of iterations fixed at =20=.  For
+better performance, leverages a prime wheel of level =4= and memoization.
+
+All predicates in module =prime= are _safe_, i.e. validate input arguments
+and ensure steadfastness.  For maximum performance, user code can directly
+call the _unsafe_ =public= (not exported) predicates in sub-module
+=prime_lgc=.
+
+*NOTE*: Since the primality test in use is _probabilistic_ in general, this
+library is not suitable for cryptographic applications.
+
+This library was developed and tested with:
+SWI-Prolog 7.3.24: http://www.swi-prolog.org/
+
+Example:
+
+	==
+	?- pack_install(nan_numerics_prime).
+	true.
+	
+	?- use_module(library(nan_numerics_prime)).
+	true.
+
+	?- time(prime_right(1234567891012345678901234567890123456789011111,P)).
+	% 1,205 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+	P = 1234567891012345678901234567890123456789011139.
+	=
+
+To be done: Implement prime counting/n-th prime functions.
+To be done: Implement probabilitic test error estimates?
+To be done: Implement deterministic tests (elliptic curves)?
