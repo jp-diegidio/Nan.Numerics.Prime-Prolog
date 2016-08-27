@@ -1,5 +1,5 @@
 <#	Nan.Windows.Scripts
-	Windows PowerShell Scripts.
+	Windows Shell Scripts
 	Copyright 2016 Julio P. Di Egidio
 	<mailto:julio@diegidio.name>
 	<http://julio.diegidio.name/Projects/Nan.Windows.Scripts/>
@@ -13,22 +13,22 @@
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #>
 
-# Usage: zipDir.ps1 <sourceDir> <targetZipFile>
+# Nan.Windows.Scripts::zipDir.ps1 (1.2.1)
+# Author: Julio P. Di Egidio (julio@diegidio.name)
+# Usage: $ zipDir.ps1 <sourceDir> <targetFile>
 # Adapted from http://stackoverflow.com/a/27289116
 # Requires PowerShell 4.0 and .NET 4.5
+# NOTE: Requires PS option ExecutionPolicy=Bypass
 
 $peTypeSource = @'
 	using System.Text;
-	namespace Nan.Windows.Scripts
-	{
-		public class PathEncoder : UTF8Encoding
-		{
+	namespace Nan.Windows.Scripts {
+		public class PathEncoder : UTF8Encoding {
 			public PathEncoder() {}
-			public override byte[] GetBytes(string s)
-			{
+			public override byte[] GetBytes(string s) {
 				s = s.Replace("\\", "/");
 				return base.GetBytes(s);
-		   }
+			}
 		}
 	}
 '@

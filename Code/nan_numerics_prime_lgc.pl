@@ -60,7 +60,7 @@ module instead of the _safe_ predicates exported by module =prime=.
 arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.2-beta
+@version	1.2.1-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Integrate =isqrt= function from GMP?

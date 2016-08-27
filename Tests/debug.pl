@@ -22,13 +22,23 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- module(debug_, []).
+/** <file> A simple prime number library :: debug
+
+@author		Julio P. Di Egidio
+@version	1.2.1-beta
+@copyright	2016 Julio P. Di Egidio
+@license	GNU GPLv3
+*/
 
 :- use_module(library(doc_http)).
 
 :- doc_server(4000, [edit(false)]).
 :- portray_text(true).
 
+:- if(exists_file('../Code/nan_numerics_prime.pl')).
 :- consult('../Code/nan_numerics_prime').
+:- else.
+:- consult('../prolog/nan_numerics_prime').
+:- endif.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

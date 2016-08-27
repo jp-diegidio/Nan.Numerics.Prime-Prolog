@@ -19,15 +19,18 @@
 :  	You should have received a copy of the GNU General Public License
 :  	along with Nan.Numerics.Prime.  If not, see <http://www.gnu.org/licenses/>.
 
-@echo off
+@rem Nan.Numerics.Prime::pack.bat (1.2.1-beta)
+@rem Author: Julio P. Di Egidio (julio@diegidio.name)
+@rem Requires PowerShell 4.0 and .NET 4.5
 
-rem Requires PowerShell 4.0 and .NET 4.5
+@echo off
 
 set name=nan_numerics_prime
 set /P ver=Version ? 
 
 set infoDir=..
 set codeDir=..\Code
+set testDir=..\Tests
 set workDir=.\.work
 set targetFile=..\Publish\%name%-%ver%.zip
 
@@ -45,16 +48,24 @@ echo Copying prolog...
 
 xcopy /Q "%codeDir%\*.*" "%workDir%\prolog\"
 
+echo Copying test...
+
+xcopy /Q "%testDir%\*.*" "%workDir%\test\"
+
 echo Generating target...
 
 if exist "%targetFile%" (
 	del "%targetFile%"
 )
 
-PowerShell ^
-	-NoLogo -NonInteractive -NoProfile ^
-	-ExecutionPolicy Bypass ^
-	-File ".\zipDir.ps1" "%workDir%" "%targetFile%"
+if exist "%targetFile%" (
+	pause
+) else (
+	PowerShell ^
+		-ExecutionPolicy Bypass ^
+		-NoLogo -NoProfile ^
+		-File ".\zipDir.ps1" "%workDir%" "%targetFile%"
+)
 
 echo Cleaning up...
 

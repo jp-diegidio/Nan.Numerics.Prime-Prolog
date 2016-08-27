@@ -22,11 +22,20 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+/** <test> A simple prime number library
+
+@author		Julio P. Di Egidio
+@version	1.2.1-beta
+@copyright	2016 Julio P. Di Egidio
+@license	GNU GPLv3
+*/
+
 % (SWI-Prolog 7.3.24)
 
 :- use_module(library(plunit)).
 
-:- use_module('../Code/nan_numerics_prime').
+:- ensure_loaded(test_inc).
+:- test_module('nan_numerics_prime.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -220,7 +229,6 @@ test(prime_file__1000,
 	true((C, H) == (TC0, TH))
 ]) :-
 	prime_save_file(File, 100), write(w),
-	prime_mem_clear,
 	prime_load_file(File), write(r),
 	prime_mem_count(C),
 	prime_mem:max_(H).
@@ -235,7 +243,6 @@ test(prime_file__1000,
 	true((C, H) == (TC0, TH))
 ]) :-
 	prime_save_file(File, 1000), write(w),
-	prime_mem_clear,
 	prime_load_file(File), write(r),
 	prime_mem_count(C),
 	prime_mem:max_(H).
@@ -250,7 +257,6 @@ test(prime_file__1000_sup,
 	true((C, H) == (TC0, TH))
 ]) :-
 	prime_save_file(File, 1000), write(w),
-	prime_mem_clear,
 	prime_load_file(File, 100), write(r),
 	prime_mem_count(C),
 	prime_mem:max_(H).
@@ -265,7 +271,6 @@ test(prime_file__1000_max,
 	true((C, H) == (TC0, TH))
 ]) :-
 	prime_save_file(File, 1000), write(w),
-	prime_mem_clear,
 	prime_load_file(File, TH), write(r),
 	prime_mem_count(C),
 	prime_mem:max_(H).

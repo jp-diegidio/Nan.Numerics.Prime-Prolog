@@ -22,7 +22,7 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/** <module> A simple prime number library :: test_all
+/** <file> A simple prime number library :: test_inc
 
 @author		Julio P. Di Egidio
 @version	1.2.1-beta
@@ -32,35 +32,14 @@
 
 % (SWI-Prolog 7.3.24)
 
-:- module(test_all,				% TODO: Check integration with SWI pack system. #####
-	[	test_all/1,		% +Spec
-		test_all/0		% 
-	]).
+test_module(File) :-
+	test_module_('../Code/', File), !.
+test_module(File) :-
+	test_module_('../prolog/', File).
 
-:- use_module(library(plunit)).
-
-:- consult('prime_mem.test').
-:- consult('prime_whl.test').
-:- consult('prime_prb.test').
-:- consult('prime_lgc.test').
-:- consult('prime.test').
-
-:- set_test_options(			% TODO: Check integration with SWI pack system. #####
-	[	load(always),
-		run(manual),
-		silent(false),
-		sto(false),
-		cleanup(false)
-	]).
-
-%!	test_all(+Spec) is det.
-
-test_all(Spec) :-
-	time(run_tests(Spec)).
-
-%!	test_all is det.
-
-test_all :-
-	time(run_tests).
+test_module_(Dir, File) :-
+	atomic_concat(Dir, File, Path),
+	exists_file(Path),
+	use_module(Path).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

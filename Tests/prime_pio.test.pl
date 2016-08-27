@@ -22,11 +22,20 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+/** <test> A simple prime number library :: pure I/O
+
+@author		Julio P. Di Egidio
+@version	1.2.1-beta
+@copyright	2016 Julio P. Di Egidio
+@license	GNU GPLv3
+*/
+
 % (SWI-Prolog 7.3.24)
 
 :- use_module(library(plunit)).
 
-:- use_module('../Code/nan_numerics_prime_pio').
+:- ensure_loaded(test_inc).
+:- test_module('nan_numerics_prime_pio.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

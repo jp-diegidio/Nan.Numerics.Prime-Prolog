@@ -40,7 +40,7 @@ primality of numbers based on a prime wheel of level =4=.
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2-beta
+@version	1.2.1-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */

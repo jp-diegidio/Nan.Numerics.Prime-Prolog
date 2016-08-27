@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-?- pack_install('../prolog/nan_numerics_prime').
-?- use_module('../prolog/nan_numerics_prime').
+?- pack_install('<path>/nan_numerics_prime-<ver>.zip').
 
 ?- pack_install(nan_numerics_prime).
+
 ?- use_module(library(nan_numerics_prime)).
 
 ?- prime_mem_clear.

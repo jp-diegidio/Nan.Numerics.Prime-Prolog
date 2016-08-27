@@ -82,7 +82,7 @@ module is not suitable for cryptographic applications.
 Example:
 
 	==
-	?- pack_install('nan_numerics_prime-1.2.zip').
+	?- pack_install(nan_numerics_prime).
 	true.
 	
 	?- use_module(library(nan_numerics_prime)).
@@ -94,7 +94,7 @@ Example:
 	==
 
 @author		Julio P. Di Egidio
-@version	1.2-beta
+@version	1.2.1-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement prime counting/n-th prime functions.
