@@ -38,7 +38,7 @@ Example:
 	?- time(prime_right(1234567891012345678901234567890123456789011111,P)).
 	% 1,205 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 	P = 1234567891012345678901234567890123456789011139.
-	=
+	==
 
 To be done: Implement prime counting/n-th prime functions.
 To be done: Implement probabilitic test error estimates?
