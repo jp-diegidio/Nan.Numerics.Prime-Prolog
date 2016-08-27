@@ -45,7 +45,7 @@ pairs of consecutive prime numbers.
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.0 (beta)
+@version	1.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement size limits?

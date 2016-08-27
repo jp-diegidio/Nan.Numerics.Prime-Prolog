@@ -23,11 +23,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 name(nan_numerics_prime).
-version('1.0'). % 1.0-beta
+version('1.2'). % 1.2-beta
 title('Nan.Numerics.Prime - A simple prime number library').
 author('Julio P. Di Egidio', 'julio@diegidio.name').
 home('http://julio.diegidio.name/Projects/Nan.Numerics.Prime/').
-download('https://julio.diegidio.name/Projects/Nan.Numerics.Prime/Prolog/nan_numerics_prime-*.zip').
+download('http://julio.diegidio.name/Projects/Nan.Numerics.Prime/Prolog/nan_numerics_prime-*.zip').
 provides(numerics).
 provides(prime).
 keywords([nan, numerics, prime]).

@@ -60,7 +60,7 @@ module instead of the _safe_ predicates exported by module =prime=.
 arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.0 (beta)
+@version	1.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Integrate =isqrt= function from GMP?
@@ -109,7 +109,7 @@ div_rev_(N, P) :-
 %	Elements of PFs are of the form =|P^F|= with _P_ the prime divisor and
 %	_F_ the corresponding power.
 %
-%	If N is =1= or a prime number, PFs is =|[N^1]|=.
+%	If N is equal to =1= or if N is a prime number, PFs is =|[N^1]|=.
 
 fact_(N, PFs) :-
 	fact__sel_rev(N, [], PFsRev),
@@ -127,11 +127,12 @@ fact__pfs(P, [P^F| PFs], [P^F1| PFs]) :- !, F1 is F + 1.
 fact__pfs(P, PFs, [P^1| PFs]).
 
 %!	gen_(+Inf:posint, -P:prime) is multi.
-%!	gen_(+Inf:posint, +Sup:posint, -P:prime) is multi.
+%!	gen_(+Inf:posint, +Sup:posint, -P:prime) is nondet.
 %
 %	Generates in _ascending_ order all prime numbers P greater than or
 %	equal to Inf, and less than or equal to Sup in the variant with arity
-%	=3=.
+%	=3=.  Fails if the prime to the left of Sup is less than the prime to
+%	the right of Inf.
 
 gen_(Inf, P) :-
 	right_(Inf, L),
@@ -148,10 +149,10 @@ gen__lh(Inf, Sup, L, H) :-
 	H >= L.
 
 %!	gen_p_(+L:prime, -P:prime) is multi.
-%!	gen_p_(+L:prime, +H:prime, -P:prime) is multi.
+%!	gen_p_(+L:prime, +H:prime, -P:prime) is nondet.
 %
 %	Generates in _ascending_ order all prime numbers P starting from L, and
-%	up to H in the variant with arity =3=.
+%	up to H in the variant with arity =3=.  Fails if H is less than L.
 
 gen_p_(P, P).
 gen_p_(L, P) :-
@@ -164,11 +165,13 @@ gen_p_(L, H, P) :-
 	next_p_(L, L1),
 	gen_p_(L1, H, P).
 
-%!	gen_rev_(+H:prime, -P:prime) is multi.
+%!	gen_rev_(+Sup:prime, -P:prime) is nondet.
 %!	gen_rev_(+Inf:posint, +Sup:posint, -P:prime) is nondet.
 %
 %	Generates in _descending_ order all prime numbers P less than or equal
 %	to Sup, and greater than or equal to Inf in the variant with arity =3=.
+%	Fails if Sup is equal to =1= or if the prime to the left of Sup is less
+%	than the prime to the right of Inf.
 
 gen_rev_(Sup, P) :-
 	left_(Sup, H),
@@ -182,7 +185,8 @@ gen_rev_(Inf, Sup, P) :-
 %!	gen_rev_p_(+L:prime, +H:prime, -P:prime) is nondet.
 %
 %	Generates in _descending_ order all prime numbers P starting from H,
-%	and down to L in the variant with arity =3=.
+%	and down to L in the variant with arity =3=.  Fails if H is less than
+%	L.
 
 gen_rev_p_(2, 2) :- !.
 gen_rev_p_(P, P).
@@ -221,7 +225,8 @@ next_p_(P0, P) :-
 
 %!	prev_(+N:posint, -P:prime) is semidet.
 %
-%	P is the greatest prime number less than N.
+%	P is the greatest prime number less than N.  Fails if N is less than or
+%	equal to =2=.
 
 prev_(N, P) :-
 	left_(N, P0),
@@ -233,7 +238,8 @@ prev__sel(_, P, P).
 
 %!	prev_p_(+P0:prime, -P:prime) is semidet.
 %
-%	P is the greatest prime number less than P0.
+%	P is the greatest prime number less than P0.  Fails if P is equal to
+%	=2=.
 
 prev_p_(P0, P) :-
 	prime_mem:get_(P, P0), !.
@@ -258,7 +264,8 @@ right__sel(_, W, P) :-
 
 %!	left_(+N:posint, -P:prime) is semidet.
 %
-%	P is the greatest prime number less than or equal to N.
+%	P is the greatest prime number less than or equal to N.  Fails if N is
+%	equal to =1=.
 
 left_(N, P) :-
 	prime_whl:left_(N, W, Cert),

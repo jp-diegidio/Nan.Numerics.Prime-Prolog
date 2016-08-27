@@ -26,8 +26,6 @@ rem Requires PowerShell 4.0 and .NET 4.5
 set name=nan_numerics_prime
 set /P ver=Version ? 
 
-set swiplExe=C:\Program Files (x86)\swipl\bin\swipl
-set scriptsDir=..\Resources\Nan.Windows.Scripts
 set infoDir=..
 set codeDir=..\Code
 set workDir=.\.work
@@ -47,10 +45,6 @@ echo Copying prolog...
 
 xcopy /Q "%codeDir%\*.*" "%workDir%\prolog\"
 
-echo Generating doc...
-
-"%swiplExe%" -q ".\pack_doc.pl"
-
 echo Generating target...
 
 if exist "%targetFile%" (
@@ -60,7 +54,7 @@ if exist "%targetFile%" (
 PowerShell ^
 	-NoLogo -NonInteractive -NoProfile ^
 	-ExecutionPolicy Bypass ^
-	-File %scriptsDir%\zipDir.ps1 "%workDir%" "%targetFile%"
+	-File ".\zipDir.ps1" "%workDir%" "%targetFile%"
 
 echo Cleaning up...
 

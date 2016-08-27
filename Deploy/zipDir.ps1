@@ -1,4 +1,4 @@
-<#  Nan.Windows.Scripts
+<#	Nan.Windows.Scripts
 	Windows PowerShell Scripts.
 	Copyright 2016 Julio P. Di Egidio
 	<mailto:julio@diegidio.name>
@@ -17,28 +17,32 @@
 # Adapted from http://stackoverflow.com/a/27289116
 # Requires PowerShell 4.0 and .NET 4.5
 
-$encoderSource = @'
+$peTypeSource = @'
 	using System.Text;
-	public class PathEncoder : UTF8Encoding
+	namespace Nan.Windows.Scripts
 	{
-		public PathEncoder() {}
-		public override byte[] GetBytes(string s)
+		public class PathEncoder : UTF8Encoding
 		{
-			s = s.Replace("\\", "/");
-			return base.GetBytes(s);
-	   }   
+			public PathEncoder() {}
+			public override byte[] GetBytes(string s)
+			{
+				s = s.Replace("\\", "/");
+				return base.GetBytes(s);
+		   }
+		}
 	}
 '@
 
+Add-Type -AssemblyName 'System'
 Add-Type -AssemblyName 'System.IO.Compression'
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
-Add-Type -TypeDefinition $encoderSource
+Add-Type -TypeDefinition $peTypeSource
 
-$clType = [System.IO.Compression.CompressionLevel]
 $zfType = [System.IO.Compression.ZipFile]
-$encType = [PathEncoder]
+$clType = [System.IO.Compression.CompressionLevel]
+$peType = [Nan.Windows.Scripts.PathEncoder]
 
-$encoder = New-Object $encType
-$compression = $clType::Optimal
+$cLev = $clType::Optimal
+$pEnc = New-Object $peType
 
-$zfType::CreateFromDirectory($Args[0], $Args[1], $compression, $false, $encoder)
+$zfType::CreateFromDirectory($Args[0], $Args[1], $cLev, $false, $pEnc)

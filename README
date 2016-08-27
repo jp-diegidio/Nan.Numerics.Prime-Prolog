@@ -1,4 +1,4 @@
-Nan.Numerics.Prime 1.0-beta
+Nan.Numerics.Prime 1.2-beta
 A simple prime number library
 Copyright 2016 Julio P. Di Egidio
 Licensed under GNU GPLv3.
@@ -29,7 +29,7 @@ SWI-Prolog 7.3.24: http://www.swi-prolog.org/
 Example:
 
 	==
-	?- pack_install(nan_numerics_prime).
+	?- pack_install('nan_numerics_prime-1.2.zip').
 	true.
 	
 	?- use_module(library(nan_numerics_prime)).

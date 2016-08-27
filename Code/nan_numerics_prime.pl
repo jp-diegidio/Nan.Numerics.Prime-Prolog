@@ -82,7 +82,7 @@ module is not suitable for cryptographic applications.
 Example:
 
 	==
-	?- pack_install(nan_numerics_prime).
+	?- pack_install('nan_numerics_prime-1.2.zip').
 	true.
 	
 	?- use_module(library(nan_numerics_prime)).
@@ -94,7 +94,7 @@ Example:
 	==
 
 @author		Julio P. Di Egidio
-@version	1.0 (beta)
+@version	1.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement prime counting/n-th prime functions.
@@ -150,7 +150,7 @@ prime_div_rev(N, P) :-
 %	Elements of PFs are of the form =|P^F|= with _P_ the prime divisor and
 %	_F_ the corresponding power.
 %
-%	If N is =1= or a prime number, PFs is =|[N^1]|=.
+%	If N is equal to =1= or if N is a prime number, PFs is =|[N^1]|=.
 %
 %	The corresponding _unsafe_ predicate is =|prime_lgc:fact_/2|=.
 
@@ -164,7 +164,8 @@ prime_fact(N, PFs) :-
 %
 %	Generates in _ascending_ order all prime numbers P, greater than or
 %	equal to Inf in the variants with arity =2= and =3=, and less than or
-%	equal to Sup in the variant with arity =3=.
+%	equal to Sup in the variant with arity =3=.  Fails if the prime to the
+%	left of Sup is less than the prime to the right of Inf.
 %
 %	The corresponding _unsafe_ predicates are =|prime_lgc:gen_/2-3|=, and
 %	=|prime_lgc:gen_p_/2-3|= if the bounds are definitely prime.
@@ -186,6 +187,8 @@ prime_gen(Inf, Sup, P) :-
 %
 %	Generates in _descending_ order all prime numbers P less than or equal
 %	to Sup, and greater than or equal to Inf in the variant with arity =3=.
+%	Fails if Sup is equal to =1= or if the prime to the left of Sup is less
+%	than the prime to the right of Inf.
 %
 %	The corresponding _unsafe_ predicates are =|prime_lgc:gen_rev_/2-3|=,
 %	and =|prime_lgc:gen_rev_p_/2-3|= if the bounds are definitely prime.
@@ -212,7 +215,8 @@ prime_next(N, P) :-
 
 %!	prime_prev(+N:posint, -P:prime) is semidet.
 %
-%	P is the greatest prime number less than N.
+%	P is the greatest prime number less than N.  Fails if N is less than or
+%	equal to =2=.
 %
 %	The corresponding _unsafe_ predicates are =|prime_lgc:prev_/2|=, and
 %	=|prime_lgc:prev_p_/2|= if N is definitely prime.
@@ -233,7 +237,8 @@ prime_right(N, P) :-
 
 %!	prime_left(+N:posint, -P:prime) is semidet.
 %
-%	P is the greatest prime number less than or equal to N.
+%	P is the greatest prime number less than or equal to N.  Fails if N is
+%	equal to =1=.
 %
 %	The corresponding _unsafe_ predicate is =|prime_lgc:left_/2|=.
 
