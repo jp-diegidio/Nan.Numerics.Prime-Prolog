@@ -22,7 +22,7 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% (SWI-Prolog 7.3.24)
+% (SWI-Prolog 7.3.25)
 
 % TODO: Improve leveraging of library(pio)?
 
@@ -35,9 +35,9 @@
 
 /** <module> A simple prime number library :: pure I/O
 
-The module =prime_pio= provides low-level predicates to read/write from/to
-a file or stream all consecutive prime numbers starting from =2= and up to
-a certain limit that is determined by the caller.
+Module =prime_pio= provides low-level predicates to read/write from/to a
+file or stream all consecutive prime numbers starting from =2= and up to a
+certain limit that is determined by the caller.
 
 The accepted file format is a comma-separated list of the consecutive
 prime numbers starting from =2= and terminated by a period.
@@ -45,7 +45,7 @@ prime numbers starting from =2= and terminated by a period.
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */

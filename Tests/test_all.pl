@@ -22,20 +22,22 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/** <module> A simple prime number library :: test_all
-
-@author		Julio P. Di Egidio
-@version	1.2.1-beta
-@copyright	2016 Julio P. Di Egidio
-@license	GNU GPLv3
-*/
-
-% (SWI-Prolog 7.3.24)
+% (SWI-Prolog 7.3.25)
 
 :- module(test_all,				% TODO: Check integration with SWI pack system. #####
 	[	test_all/1,		% +Spec
 		test_all/0		% 
 	]).
+
+/** <module> A simple prime number library :: test
+
+Predicates to run all tests.  (Entry point for SWI pack system.)
+
+@author		Julio P. Di Egidio
+@version	1.2.2-beta
+@copyright	2016 Julio P. Di Egidio
+@license	GNU GPLv3
+*/
 
 :- use_module(library(plunit)).
 

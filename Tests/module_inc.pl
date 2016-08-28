@@ -22,22 +22,22 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/** <file> A simple prime number library :: test_inc
+% (SWI-Prolog 7.3.25)
+
+/*	A simple prime number library :: module_inc
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
-% (SWI-Prolog 7.3.24)
+module_inc(File) :-
+	module_inc_('../Code/', File), !.
+module_inc(File) :-
+	module_inc_('../prolog/', File).
 
-test_module(File) :-
-	test_module_('../Code/', File), !.
-test_module(File) :-
-	test_module_('../prolog/', File).
-
-test_module_(Dir, File) :-
+module_inc_(Dir, File) :-
 	atomic_concat(Dir, File, Path),
 	exists_file(Path),
 	use_module(Path).

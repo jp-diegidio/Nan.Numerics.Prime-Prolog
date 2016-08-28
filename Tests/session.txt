@@ -1,7 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ?- pack_install('<path>/nan_numerics_prime-<ver>.zip').
-
 ?- pack_install(nan_numerics_prime).
 
 ?- use_module(library(nan_numerics_prime)).

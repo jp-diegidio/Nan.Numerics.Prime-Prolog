@@ -1,3 +1,4 @@
+Nan.Numerics.Prime/Prolog 1.2.2-beta
 Nan.Numerics.Prime
 A simple prime number library
 Copyright 2016 Julio P. Di Egidio
@@ -5,13 +6,19 @@ Licensed under GNU GPLv3.
 http://julio.diegidio.name/Projects/Nan.Numerics.Prime/
 https://github.com/jp-diegidio/Nan.Numerics.Prime-Prolog/
 
+Version 1.2.2-beta:
+-------------------
+- BREAKING: prime_mem_fill/1 becomes det.
+- Improved documentation.
+- Upgraded to SWI-Prolog 7.3.25.
+
 Version 1.2.1-beta:
 -------------------
-- Integration of tests into SWI pack system.
+- Integrated tests into SWI pack system.
 - Bundled Nan.Windows.Scripts (1.2.1).
 - Few non-critical code improvements.
 - Created history file.
 
 Version 1.2-beta:
 -----------------
-- Tagged version 1.2-beta.
+- Baseline version 1.2-beta.

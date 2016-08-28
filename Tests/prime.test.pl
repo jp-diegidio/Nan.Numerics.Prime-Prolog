@@ -22,20 +22,20 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/** <test> A simple prime number library
+% (SWI-Prolog 7.3.25)
+
+/*	A simple prime number library :: prime
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
-% (SWI-Prolog 7.3.24)
-
 :- use_module(library(plunit)).
 
-:- ensure_loaded(test_inc).
-:- test_module('nan_numerics_prime.pl').
+:- ensure_loaded(module_inc).
+:- module_inc('nan_numerics_prime.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -130,9 +130,11 @@ test(right_next__c,
 :- begin_tests(prime_fill, [setup(prime_mem:clear_)]).
 
 test(prime_fill__1,
-[	fail
+[	true((C, H) == (0, 2))
 ]) :-
-	prime_mem_fill(1).
+	prime_mem_fill(1),
+	prime_mem_count(C),
+	prime_mem:max_(H).
 
 test(prime_fill__2,
 [	true((C, H) == (0, 2))

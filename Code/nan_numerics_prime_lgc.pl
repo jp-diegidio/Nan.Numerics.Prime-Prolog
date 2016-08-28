@@ -22,7 +22,7 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% (SWI-Prolog 7.3.24)
+% (SWI-Prolog 7.3.25)
 
 :- module(prime_lgc, []).
 
@@ -48,21 +48,20 @@
 
 /** <module> A simple prime number library :: logic
 
-The module =prime_lgc= provides low-level _unsafe_ =public= (not exported)
-predicates to test (positive integer) numbers for primality, find divisors
-and factor numbers, generate prime numbers in some interval, and find
-consecutive prime numbers.
+To allow for maximum performance, module =prime_lgc= provides _unsafe_
+=public= (not exported) predicates that user code can call directly instead
+of calling the _safe_ predicates exported by module =prime=.
 
-For maximum performance, user code can directly call the predicates in this
-module instead of the _safe_ predicates exported by module =prime=.
+For info on the implementation, see library(nan_numerics_prime).
 
 *NOTE*: Predicates in this module are _unsafe_, i.e. do not validate input
 arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
+@see		library(nan_numerics_prime)
 @tbd		Integrate =isqrt= function from GMP?
 */
 

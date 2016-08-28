@@ -22,7 +22,7 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% (SWI-Prolog 7.3.24)
+% (SWI-Prolog 7.3.25)
 
 % TODO: Implement test error estimates?
 % TODO: Implement option for num. of iterations?
@@ -36,7 +36,7 @@
 
 /** <module> A simple prime number library :: probabilistic
 
-The module =prime_prb= provides low-level predicates to test candidate
+Module =prime_prb= provides low-level predicates to test candidate
 primality of numbers based on a probabilistic primality test.
 
 Implements a variant of the *Miller-Rabin* primality test that is
@@ -46,7 +46,7 @@ it is _probabilistic_ with the number of iterations fixed at =20=.
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement test error estimates?

@@ -22,20 +22,20 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-/** <test> A simple prime number library :: probabilistic
+% (SWI-Prolog 7.3.25)
+
+/*	A simple prime number library :: probabilistic
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
-% (SWI-Prolog 7.3.24)
-
 :- use_module(library(plunit)).
 
-:- ensure_loaded(test_inc).
-:- test_module('nan_numerics_prime_prb.pl').
+:- ensure_loaded(module_inc).
+:- module_inc('nan_numerics_prime_prb.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

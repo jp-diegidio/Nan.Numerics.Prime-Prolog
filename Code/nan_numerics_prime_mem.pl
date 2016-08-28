@@ -22,7 +22,7 @@
 */
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% (SWI-Prolog 7.3.24)
+% (SWI-Prolog 7.3.25)
 
 % TODO: Implement size limits?
 
@@ -39,13 +39,13 @@
 
 /** <module> A simple prime number library :: memoization
 
-The module =prime_mem= provides low-level predicates for the memoization of
+Module =prime_mem= provides low-level predicates for the memoization of
 pairs of consecutive prime numbers.
 
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2.1-beta
+@version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement size limits?
