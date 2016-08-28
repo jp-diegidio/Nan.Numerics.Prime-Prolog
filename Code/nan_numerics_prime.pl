@@ -46,19 +46,19 @@
 		prime_right/2,			% +N:posint, -P:prime
 		prime_left/2,			% +N:posint, -P:prime
 		%%
-		prime_load_file/1,		% +File:file
-		prime_load_file/2,		% +File:file, +Sup:posint
-		prime_save_file/2,		% +File:file, +Sup:posint
-		prime_load_stream/1,	% +Stream:stream
-		prime_load_stream/2,	% +Stream:stream, +Sup:posint
-		prime_save_stream/2,	% +Stream:stream, +Sup:posint
-		%%
 		prime_mem_clear/0,		% 
 		prime_mem_fill/1,		% +Sup:posint
 		prime_mem_count/1,		% -Count:nonneg
 		prime_det_max/1,		% -Max:posint
 		prime_prb_mul/1,		% -Mul:posint
-		prime_whl_lev/1			% -Lev:posint
+		prime_whl_lev/1,		% -Lev:posint
+		%%
+		prime_load_file/1,		% +File:file
+		prime_load_file/2,		% +File:file, +Sup:posint
+		prime_save_file/2,		% +File:file, +Sup:posint
+		prime_load_stream/1,	% +Stream:stream
+		prime_load_stream/2,	% +Stream:stream, +Sup:posint
+		prime_save_stream/2		% +Stream:stream, +Sup:posint
 	]).
 
 /** <module> A simple prime number library
@@ -262,6 +262,55 @@ prime_left(N, P) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%!	prime_mem_clear is det.
+%
+%	Clears all memoization.
+
+prime_mem_clear :-
+	prime_mem:clear_.
+
+%!	prime_mem_fill(+Sup:posint) is det.
+%
+%	Ensures that all pairs of consecutive prime numbers less than or equal
+%	to Sup have been memoized.
+
+prime_mem_fill(Sup) :-
+	must_be(posint, Sup),
+	ignore(forall(prime_lgc:gen_(2, Sup, _), true)).
+
+%!	prime_mem_count(-Count:nonneg) is det.
+%
+%	Count is the current number of memoized pairs of consecutive prime
+%	numbers.
+
+prime_mem_count(Count) :-
+	prime_mem:count_(Count_), Count = Count_.
+
+%!	prime_det_max(-Max:posint) is det.
+%
+%	Max is the maximum number for which the primality test is still
+%	_deterministic_.
+
+prime_det_max(Max) :-
+	prime_prb:det_max_(Max_), Max = Max_.
+
+%!	prime_prb_mul(-Mul:posint) is det.
+%
+%	Mul is the number of iterations for the _probabilistic_ primality test.
+
+prime_prb_mul(Mul) :-
+	prime_prb:prb_mul_(Mul_), Mul = Mul_.
+
+%!	prime_whl_lev(-Lev:posint) is det.
+%
+%	Lev is the number of consecutive prime numbers starting from =2= that
+%	generate the underlying prime wheel.
+
+prime_whl_lev(Lev) :-
+	prime_whl:lev_(Lev_), Lev = Lev_.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %!	prime_load_file(+File:file) is det.
 %!	prime_load_file(+File:file, +Sup:posint) is semidet.
 %
@@ -407,55 +456,6 @@ load_stream__add(Sup, P1, P2) :-
 save_stream_(Sup, Stream) :-
 	Sup >= 2,
 	prime_pio:write_(Stream, prime_lgc:gen_(3, Sup)).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%!	prime_mem_clear is det.
-%
-%	Clears all memoization.
-
-prime_mem_clear :-
-	prime_mem:clear_.
-
-%!	prime_mem_fill(+Sup:posint) is det.
-%
-%	Ensures that all pairs of consecutive prime numbers less than or equal
-%	to Sup have been memoized.
-
-prime_mem_fill(Sup) :-
-	must_be(posint, Sup),
-	ignore(forall(prime_lgc:gen_(2, Sup, _), true)).
-
-%!	prime_mem_count(-Count:nonneg) is det.
-%
-%	Count is the current number of memoized pairs of consecutive prime
-%	numbers.
-
-prime_mem_count(Count) :-
-	prime_mem:count_(Count_), Count = Count_.
-
-%!	prime_det_max(-Max:posint) is det.
-%
-%	Max is the maximum number for which the primality test is still
-%	_deterministic_.
-
-prime_det_max(Max) :-
-	prime_prb:det_max_(Max_), Max = Max_.
-
-%!	prime_prb_mul(-Mul:posint) is det.
-%
-%	Mul is the number of iterations for the _probabilistic_ primality test.
-
-prime_prb_mul(Mul) :-
-	prime_prb:prb_mul_(Mul_), Mul = Mul_.
-
-%!	prime_whl_lev(-Lev:posint) is det.
-%
-%	Lev is the number of consecutive prime numbers starting from =2= that
-%	generate the underlying prime wheel.
-
-prime_whl_lev(Lev) :-
-	prime_whl:lev_(Lev_), Lev = Lev_.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

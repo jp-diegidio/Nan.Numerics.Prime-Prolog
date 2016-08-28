@@ -24,7 +24,8 @@
 
 % (SWI-Prolog 7.3.25)
 
-% TODO: Implement size limits?
+% TODO: Use gobal variables?
+% TODO: Implement size limits? (By recent use?)
 
 :- module(prime_mem, []).
 
@@ -48,7 +49,8 @@ pairs of consecutive prime numbers.
 @version	1.2.2-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
-@tbd		Implement size limits?
+@tbd		Use gobal variables?
+@tbd		Implement size limits? (By recent use?)
 */
 
 :- initialization(clear_).
