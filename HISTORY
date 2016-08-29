@@ -1,10 +1,14 @@
-Nan.Numerics.Prime/Prolog 1.2.5-beta
+Nan.Numerics.Prime/Prolog 1.3.0-beta
 Nan.Numerics.Prime
 A simple prime number library
 Copyright 2016 Julio P. Di Egidio
 Licensed under GNU GPLv3.
 http://julio.diegidio.name/Projects/Nan.Numerics.Prime/
 https://github.com/jp-diegidio/Nan.Numerics.Prime-Prolog/
+
+Version 1.3.0-beta:
+-------------------
+- Thread-local memoization and global flags.
 
 Version 1.2.5-beta:
 -------------------

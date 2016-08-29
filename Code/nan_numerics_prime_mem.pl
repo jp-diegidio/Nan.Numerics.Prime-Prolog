@@ -24,8 +24,7 @@
 
 % (SWI-Prolog 7.3.25)
 
-% TODO: Use gobal variables?
-% TODO: Implement size limits? (By recent use?)
+% NOTE: Implements thread-local memoization.
 
 :- module(prime_mem, []).
 
@@ -34,7 +33,7 @@
 	get_/1,			% ?P:prime
 	get_/2,			% ?P1:prime, ?P2:prime
 	add_/2,			% +P1:prime, +P2:prime
-	count_/1,		% -Count:nonneg
+	count_/1,		% -Cnt:nonneg
 	max_/1,			% -Max:prime
 	clear_/0.		% 
 
@@ -43,23 +42,21 @@
 Module =prime_mem= provides low-level predicates for the memoization of
 pairs of consecutive prime numbers.
 
+Implements thread-local memoization.
+
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
-@tbd		Use gobal variables?
-@tbd		Implement size limits? (By recent use?)
 */
-
-:- initialization(clear_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %!	gen_(?P1:prime, ?P2:prime) is nondet.
 %
-%	Generates the memoized pairs (for program inspection).
+%	Generates all memoized pairs (for program inspection).
 
 gen_(P1, P2) :-
 	table_(P1, P2).
@@ -82,46 +79,46 @@ get_(P1, P2) :-
 
 %!	add_(+P1:prime, +P2:prime) is det.
 %
-%	Memoizes the pair P1, P2.
+%	Memoizes the pair P1, P2 of consecutive prime numbers.
 %
 %	*NOTE*: Does not check that P1, P2 is a pair of consecutive prime
 %	numbers and that the pair has not already been memoized.
 
 add_(P1, P2) :-
 	table_add_(P1, P2),
-	flag_set_(count, C, C + 1),
-	flag_set_(max, P, max(P, P2)).
+	flag_set_('Nan.Numerics.Prime::mem_cnt', C, C + 1),
+	flag_set_('Nan.Numerics.Prime::mem_max', P, max(P, P2)).
 
-%!	count_(-Count:nonneg) is det.
+%!	count_(-Cnt:nonneg) is det.
 %
-%	Count is the number of memoized pairs.
+%	Cnt is the total number of memoized pairs.
 
-count_(Count) :-
-	flag_get_(count, Count).
+count_(Cnt) :-
+	flag_get_('Nan.Numerics.Prime::mem_cnt', Cnt).
 
 %!	max_(-Max:prime) is det.
 %
 %	Max is the greatest prime number that exists in any memoized pair.
 %
-%	Max is =2= if no memoized pair exists.
+%	Max is =2= if no pair has been memoized.
 
 max_(Max) :-
-	flag_get_(max, Max).
+	flag_get_('Nan.Numerics.Prime::mem_max', Max).
 
 %!	clear_ is det.
 %
 %	Clears all memoization.
 
 clear_ :-
-	clearall_,
-	flag_set_(count, 0),
-	flag_set_(max, 2).
+	table_clear_,
+	flag_set_('Nan.Numerics.Prime::mem_cnt', 0),
+	flag_set_('Nan.Numerics.Prime::mem_max', 2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %	table_(?T1:nonneg, ?T2:nonneg) is nondet.
 
-:- dynamic
+:- thread_local
 	table_/2.
 
 %	table_get_(?T1:nonneg, ?T2:nonneg) is semidet.
@@ -134,35 +131,36 @@ table_get_(T1, T2) :-
 table_add_(T1, T2) :-
 	assertz(table_(T1, T2)).
 
-%	flags_(?Key:atom, ?Val:nonneg) is nondet.
+%	table_clear_ is det.
 
-:- dynamic
-	flags_/2.
+table_clear_ :-
+	retractall(table_(_, _)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %	flag_get_(+Key:atom, -Val:nonneg) is det.
 
 flag_get_(Key, Val) :-
-	(flags_(Key, Val); Val = 0), !.
+	(nb_current(Key, Val); Val = 0), !.
 
-%	flag_set_(+Key:atom, +New:arith(nonneg)) is det.
-
-flag_set_(Key, New) :-
-	flag_set_(Key, _, New).
-
+%	flag_set_(+Key:atom, +Val:nonneg) is det.
 %	flag_set_(+Key:atom, -Old:nonneg, +New:arith(nonneg)) is det.
 
+flag_set_(Key, Val) :-
+	nb_setval(Key, Val).
+
 flag_set_(Key, Old, New) :-
-	flag_get_(Key, Old), Val is New,
-	ignore((
-		Val \== Old,
-		ignore(retract(flags_(Key, _))),
-		assertz(flags_(Key, Val))
-	)).
+	flag_get_(Key, Old),
+	Val is New,
+	nb_setval(Key, Val).
 
-%	clearall_ is det.
+%	flag_clear_(+Key:atom) is det.
 
-clearall_ :-
-	retractall(table_(_, _)),
-	retractall(flags_(_, _)).
+flag_clear_(Key) :-
+	nb_delete(Key).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- thread_initialization(clear_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -44,62 +44,62 @@
 test(table_get__0,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_get_(_, _).
 
 test(table_get__1,
 [	true((T1, T2) == (2, 3))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(T1, T2).
 
 test(table_get__1_s,
 [	true((2, T2) == (2, 3))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(2, T2).
 
 test(table_get__1_f,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(3, _).
 
 test(table_get__1_ss,
 [	true
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(2, 3).
 
 test(table_get__1_sf,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(2, 5).
 
 test(table_get__1_fs,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(3, 3).
 
 test(table_get__1_ff,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_get_(3, 5).
 
 test(table_get__3,
 [	true((T1, T2) == (2, 3))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_add_(3, 5),
 	prime_mem:table_add_(5, 7),
@@ -108,7 +108,7 @@ test(table_get__3,
 test(table_get__3_ord,
 [	true((T1, T2) == (5, 7))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(5, 7),
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_add_(3, 5),
@@ -117,7 +117,7 @@ test(table_get__3_ord,
 test(table_get__3_1,
 [	true((2, T2) == (2, 3))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_add_(3, 5),
 	prime_mem:table_add_(5, 7),
@@ -126,7 +126,7 @@ test(table_get__3_1,
 test(table_get__3_2,
 [	true((3, T2) == (3, 5))
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_add_(3, 5),
 	prime_mem:table_add_(5, 7),
@@ -135,7 +135,7 @@ test(table_get__3_2,
 test(table_get__3_f,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	prime_mem:clear_,
 	prime_mem:table_add_(2, 3),
 	prime_mem:table_add_(3, 5),
 	prime_mem:table_add_(5, 7),
@@ -147,58 +147,63 @@ test(table_get__3_f,
 
 :- begin_tests('prime_mem:flags_').
 
+t__flags__clear :-
+	prime_mem:flag_clear_(f_a),
+	prime_mem:flag_clear_(f_b),
+	prime_mem:flag_clear_(f_c).
+
 test(flag_get__0,
 [	true(Val == 0)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_get_(f_a, Val).
 
 test(flag_get__10,
 [	true((Old, Val) == (0, 0))
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, Old, Old),
 	prime_mem:flag_get_(f_a, Val).
 
 test(flag_get__10s,
 [	true(Val == 0)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, 0),
 	prime_mem:flag_get_(f_a, Val).
 
 test(flag_get__10s_s,
 [	true
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, 0),
 	prime_mem:flag_get_(f_a, 0).
 
 test(flag_get__10s_f,
 [	fail
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, 0),
 	prime_mem:flag_get_(f_a, 1).
 
 test(flag_get__11,
 [	true(Val == 1)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, Old, Old+1),
 	prime_mem:flag_get_(f_a, Val).
 
 test(flag_get__11s,
 [	true(Val == 1)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, 1),
 	prime_mem:flag_get_(f_a, Val).
 
 test(flag_get__3_a,
 [	true(Val == 1)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, Old, Old+1),
 	prime_mem:flag_set_(f_b, _, Old+2),
 	prime_mem:flag_set_(f_c, _, Old+3),
@@ -207,7 +212,7 @@ test(flag_get__3_a,
 test(flag_get__3_b,
 [	true(Val == 2)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_a, Old, Old+1),
 	prime_mem:flag_set_(f_b, _, Old+2),
 	prime_mem:flag_set_(f_c, _, Old+3),
@@ -216,7 +221,7 @@ test(flag_get__3_b,
 test(flag_get__3_b_ord,
 [	true(Val == 2)
 ]) :-
-	prime_mem:clearall_,
+	t__flags__clear,
 	prime_mem:flag_set_(f_c, Old, Old+3),
 	prime_mem:flag_set_(f_a, _, Old+1),
 	prime_mem:flag_set_(f_b, _, Old+2),
