@@ -27,7 +27,7 @@
 /*	A simple prime number library :: prime
 
 @author		Julio P. Di Egidio
-@version	1.2.2-beta
+@version	1.2.3-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
@@ -39,7 +39,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime, [setup(prime_mem:clear_)]).
+:- begin_tests(prime, [setup(prime_mem_clear)]).
 
 test(test__p1,
 [	setup(t__p1(N)),
@@ -127,7 +127,7 @@ test(right_next__c,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime_fill, [setup(prime_mem:clear_)]).
+:- begin_tests(prime_fill, [setup(prime_mem_clear)]).
 
 test(prime_fill__1,
 [	true((C, H) == (0, 2))
@@ -165,7 +165,7 @@ test(prime_fill__1000,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime_gen, [setup(prime_mem:clear_)]).
+:- begin_tests(prime_gen, [setup(prime_mem_clear)]).
 
 test(prime_gen__1_1,
 [	fail
@@ -219,7 +219,7 @@ test(prime_gen__1_1e4,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime_file, [setup(prime_mem:clear_)]).
+:- begin_tests(prime_file, [setup(prime_mem_clear)]).
 
 test(prime_file__1000,
 [	setup((

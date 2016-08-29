@@ -34,7 +34,7 @@
 Predicates to run all tests.  (Entry point for SWI pack system.)
 
 @author		Julio P. Di Egidio
-@version	1.2.2-beta
+@version	1.2.3-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */

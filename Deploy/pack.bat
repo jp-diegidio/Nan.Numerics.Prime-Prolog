@@ -19,7 +19,7 @@
 :  	You should have received a copy of the GNU General Public License
 :  	along with Nan.Numerics.Prime.  If not, see <http://www.gnu.org/licenses/>.
 
-@rem Nan.Numerics.Prime::pack.bat (1.2.2-beta)
+@rem Nan.Numerics.Prime::pack.bat (1.2.3-beta)
 @rem Author: Julio P. Di Egidio (julio@diegidio.name)
 @rem Requires PowerShell 4.0 and .NET 4.5
 

@@ -23,7 +23,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 name(nan_numerics_prime).
-version('1.2.1'). % 1.2.1-beta
+version('1.2.3'). % 1.2.3-beta
 title('Nan.Numerics.Prime - A simple prime number library').
 author('Julio P. Di Egidio', 'julio@diegidio.name').
 home('http://julio.diegidio.name/Projects/Nan.Numerics.Prime/').

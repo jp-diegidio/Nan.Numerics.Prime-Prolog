@@ -3,6 +3,8 @@
 ?- pack_install('<path>/nan_numerics_prime-<ver>.zip').
 ?- pack_install(nan_numerics_prime).
 
+?- use_module(library('../Code/nan_numerics_prime')).
+?- use_module(library('../prolog/nan_numerics_prime')).
 ?- use_module(library(nan_numerics_prime)).
 
 ?- prime_mem_clear.

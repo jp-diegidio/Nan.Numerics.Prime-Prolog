@@ -46,7 +46,7 @@ it is _probabilistic_ with the number of iterations fixed at =20=.
 *NOTE*: Predicates in this module are not meant for public use.
 
 @author		Julio P. Di Egidio
-@version	1.2.2-beta
+@version	1.2.3-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement test error estimates?
