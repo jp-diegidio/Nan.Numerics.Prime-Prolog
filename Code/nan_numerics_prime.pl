@@ -107,7 +107,7 @@ Usage example:
     ==
 
 @author		Julio P. Di Egidio
-@version	1.2.4-beta
+@version	1.2.5-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @tbd		Implement prime counting/n-th prime functions.
