@@ -259,6 +259,7 @@ right__sel(Cert, P, P) :-
 	test__do(Cert, P), !.
 right__sel(_, W, P) :-
 	W1 is W + 2,
+% writeln(['#### ', W1]),
 	right_(W1, P).
 
 %!	left_(+N:posint, -P:prime) is semidet.
@@ -274,6 +275,7 @@ left__sel(Cert, P, P) :-
 	test__do(Cert, P), !.
 left__sel(_, W, P) :-
 	W1 is W - 2,
+% writeln(['#### ', W1]),
 	left_(W1, P).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

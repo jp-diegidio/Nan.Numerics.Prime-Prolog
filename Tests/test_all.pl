@@ -25,8 +25,8 @@
 % (SWI-Prolog 7.3.25)
 
 :- module(test_all,				% TODO: Check integration with SWI pack system. #####
-	[	test_all/1,		% +Spec
-		test_all/0		% 
+	[	test_all/0,		% 
+		test_all/1		% +Spec
 	]).
 
 /** <module> A simple prime number library :: test
@@ -55,14 +55,30 @@ Predicates to run all tests.  (Entry point for SWI pack system.)
 		cleanup(false)
 	]).
 
-%!	test_all(+Spec) is det.
-
-test_all(Spec) :-
-	time(run_tests(Spec)).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %!	test_all is det.
+%!	test_all(+Spec) is det.
 
 test_all :-
-	time(run_tests).
+	test_all__do(run_tests).
+
+test_all(Spec) :-
+	test_all__do(run_tests(Spec)).
+
+:- meta_predicate
+	test_all__do(0).
+
+test_all__do(G) :-
+	setup_call_cleanup(
+		prime:prime_whl_lev(Lev),
+		(	prime:prime_whl_zero,
+			prime:prime_whl_next(4),
+			time(G)
+		),
+		(	prime:prime_whl_zero,
+			prime:prime_whl_next(Lev)
+		)
+	).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

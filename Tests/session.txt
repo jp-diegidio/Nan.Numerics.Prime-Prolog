@@ -81,6 +81,7 @@ true.
 
 ?- test_all.
 	% Warm run
+	% WLev = 4
 % PL-Unit: prime_mem:table_ ............. done
 % PL-Unit: prime_mem:flags_ .......... done
 % PL-Unit: prime_mem:get_1_ ....... done

@@ -27,7 +27,7 @@
 /*	A simple prime number library :: wheel
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
@@ -36,6 +36,56 @@
 
 :- ensure_loaded(module_inc).
 :- module_inc('nan_numerics_prime_whl.pl').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% t__set(Lev) :-
+	% prime_whl:((
+		% wzero_,
+		% wnext_(Lev)
+	% )).
+
+% t__get(Lev, P0, PL, Ns, Is) :-
+	% prime_whl:((
+		% w__lev(Lev),
+		% w__p0(P0),
+		% w__pL(PL),
+		% findall(N, w__a(N), Ns),
+		% findall(I, w__p(I), Is)
+	% )).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% :- begin_tests('prime_whl:wheel_',
+	% [	setup(prime_whl:w__lev(Lev)),
+		% cleanup(t__set(Lev))
+	% ]).
+
+% test(wheel__0,
+% [	true((Lev, P0, PL, Ns, Is) == (0, 2, 1, [], [0]))
+% ]) :-
+	% t__set(0),
+	% t__get(Lev, P0, PL, Ns, Is).
+
+% test(wheel__1,
+% [	true((Lev, P0, PL, Ns, Is) == (1, 3, 2, [2], [0]))
+% ]) :-
+	% t__set(1),
+	% t__get(Lev, P0, PL, Ns, Is).
+
+% test(wheel__2,
+% [	true((Lev, P0, PL, Ns, Is) == (2, 5, 6, [2, 3], [0, 2]))
+% ]) :-
+	% t__set(2),
+	% t__get(Lev, P0, PL, Ns, Is).
+
+% test(wheel__3,
+% [	true((Lev, P0, PL, Ns, Is) == (3, 7, 30, [2, 3, 5], [0, 4, 6, 10, 12, 16, 22, 24]))
+% ]) :-
+	% t__set(3),
+	% t__get(Lev, P0, PL, Ns, Is).
+
+% :- end_tests('prime_whl:wheel_').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -100,6 +150,11 @@ test(test__122,
 [	fail
 ]) :-
 	prime_whl:test_(122, _).
+
+test(test__219,
+[	fail
+]) :-
+	prime_whl:test_(219, _).
 
 test(test__220,
 [	fail
@@ -187,6 +242,11 @@ test(right__122,
 ]) :-
 	prime_whl:right_(122, W, Cert).
 
+test(right__219,
+[	true((W, Cert) == (221, false))
+]) :-
+	prime_whl:right_(219, W, Cert).
+
 test(right__220,
 [	true((W, Cert) == (221, false))
 ]) :-
@@ -267,6 +327,11 @@ test(left__122,
 [	true((W, Cert) == (121, false))
 ]) :-
 	prime_whl:left_(122, W, Cert).
+
+test(left__219,
+[	true((W, Cert) == (211, false))
+]) :-
+	prime_whl:left_(219, W, Cert).
 
 test(left__220,
 [	true((W, Cert) == (211, false))
