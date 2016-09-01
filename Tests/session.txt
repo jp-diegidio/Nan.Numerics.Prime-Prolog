@@ -7,17 +7,21 @@
 ?- use_module('../prolog/nan_numerics_prime').
 ?- use_module(library(nan_numerics_prime)).
 
+?- prime_whl_zero,time(prime_whl_next(8)).
+% 9,673,459 inferences, 9.126 CPU in 9.260 seconds (99% CPU, 1059982 Lips)
+true.
+
 ?- prime_mem_clear.
 true.
 
 ?- time((prime_gen(1,1000,P),format('~d,',[P]),fail));true.
 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997,
-% 12,529 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 10,656 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 true.
 
 ?- time((prime_gen(1,1000,P),format('~d,',[P]),fail));true.
 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997,
-% 1,238 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 1,246 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 true.
 
 ?- H1 is 10^3,findall(P,prime_gen(1,H1,P),Ps),findall(P,prime_gen_rev(1,H1,P),Rs),sort(Rs,Ps).
@@ -29,22 +33,22 @@ Rs = [997, 991, 983, 977, 971, 967, 953, 947, 941|...].
 true.
 
 ?- time(prime_test(123456789012345678901234567890123456789012345679141)).
-% 348 inferences, 0.016 CPU in 0.010 seconds (156% CPU, 22308 Lips)
+% 348 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 true.
 
 ?- between(1,6,F),H1 is 10^F,time((prime_gen(1,H1,P),fail;format('F=~d~n',[F]))),fail;true.
 F=1
-% 122 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 149 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=2
-% 785 inferences, 0.000 CPU in 0.010 seconds (0% CPU, Infinite Lips)
+% 1,006 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=3
-% 11,683 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 9,578 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=4
-% 117,838 inferences, 0.047 CPU in 0.040 seconds (117% CPU, 2517890 Lips)
+% 112,175 inferences, 0.031 CPU in 0.031 seconds (100% CPU, 3595330 Lips)
 F=5
-% 1,121,766 inferences, 0.390 CPU in 0.420 seconds (93% CPU, 2876305 Lips)
+% 1,040,242 inferences, 0.359 CPU in 0.359 seconds (100% CPU, 2899207 Lips)
 F=6
-% 10,755,712 inferences, 3.853 CPU in 3.870 seconds (100% CPU, 2791353 Lips)
+% 9,784,310 inferences, 3.416 CPU in 3.494 seconds (98% CPU, 2863906 Lips)
 true.
 
 ?- time(prime_test(123456789012345678901234567890123456789012345679141)).
@@ -53,44 +57,46 @@ true.
 
 ?- between(1,6,F),H1 is 10^F,time((prime_gen(1,H1,P),fail;format('F=~d~n',[F]))),fail;true.
 F=1
-% 50 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 57 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=2
-% 181 inferences, 0.000 CPU in 0.010 seconds (0% CPU, Infinite Lips)
+% 189 inferences, 0.000 CPU in 0.010 seconds (0% CPU, Infinite Lips)
 F=3
-% 1,070 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 1,078 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=4
-% 7,638 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+% 7,533 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
 F=5
-% 57,651 inferences, 0.016 CPU in 0.020 seconds (78% CPU, 3695553 Lips)
+% 57,624 inferences, 0.000 CPU in 0.010 seconds (0% CPU, Infinite Lips)
 F=6
-% 471,163 inferences, 0.109 CPU in 0.110 seconds (99% CPU, 4314652 Lips)
+% 471,097 inferences, 0.109 CPU in 0.110 seconds (99% CPU, 4314047 Lips)
 true.
 
 ?- prime_mem_clear.
 true.
 
 ?- H1 is 10^7,time((prime_gen(1,H1,P),fail));true.
-% 122,300,239 inferences, 46.426 CPU in 46.730 seconds (99% CPU, 2634311 Lips)
+% 109,918,445 inferences, 41.699 CPU in 41.902 seconds (100% CPU, 2635993 Lips)
 true.
 
 ?- H1 is 10^7,time((prime_gen(1,H1,P),fail));true.
-% 3,987,537 inferences, 0.967 CPU in 0.960 seconds (101% CPU, 4122737 Lips)
+% 3,987,551 inferences, 0.952 CPU in 0.967 seconds (98% CPU, 4190338 Lips)
 true.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-?- test_all.
-	% Warm run
-	% WLev = 4
+?- prime_whl_zero, prime_whl_next(4).
+true.
+
+?- test_all.	% Warm run
+% [nan_numerics_prime] Wheel lev. 4:
 % PL-Unit: prime_mem:table_ ............. done
 % PL-Unit: prime_mem:flags_ .......... done
 % PL-Unit: prime_mem:get_1_ ....... done
 % PL-Unit: prime_mem:get_2_ ....... done
 % PL-Unit: prime_mem:count_ ..... done
 % PL-Unit: prime_mem:max_ ..... done
-% PL-Unit: prime_whl:test_ ............... done
-% PL-Unit: prime_whl:right_ ................ done
-% PL-Unit: prime_whl:left_ ............... done
+% PL-Unit: prime_whl:test_ ................ done
+% PL-Unit: prime_whl:right_ ................. done
+% PL-Unit: prime_whl:left_ ................ done
 % PL-Unit: prime_prb:test_ ....... done
 % PL-Unit: prime_lgc:test_ ............... done
 % PL-Unit: prime_lgc:div_ ........... done
@@ -114,8 +120,8 @@ true.
 % PL-Unit: prime_fill .... done
 % PL-Unit: prime_gen ......... done
 % PL-Unit: prime_file .....wrwrwrwr done
-% All 284 tests passed
-% 1,615,220 inferences, 0.686 CPU in 0.830 seconds (83% CPU, 2353161 Lips)
+% All 287 tests passed
+% 1,795,837 inferences, 0.718 CPU in 0.874 seconds (82% CPU, 2502544 Lips)
 true.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

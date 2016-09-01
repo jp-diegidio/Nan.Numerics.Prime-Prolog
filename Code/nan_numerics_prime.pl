@@ -523,8 +523,52 @@ error:has_type(prime, Term) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization((prime_whl_zero, prime_whl_next(7)), now).	% TODO: Review this! #####
+:- multifile
+	prolog:message//1.
 
-:- thread_initialization(prime_mem_fill(10_000)).				% TODO: Review this. #####
+prolog:message(prime__init) -->
+	[ '[nan_numerics_prime] Module =prime= initializing:'-[] ].
+%%
+prolog:message(prime_whl__init_begin(Lev)) -->
+	[ '[nan_numerics_prime] Preparing wheel lev. ~d: '-[Lev], flush].
+prolog:message(prime_whl__init_next(Lev)) -->
+	[ at_same_line, '~d'-[Lev], flush].
+prolog:message(prime_whl__init_end(Lev)) -->
+	[ at_same_line, '~d.'-[Lev] ].
+%%
+prolog:message(prime_mem__init_begin(Sup)) -->
+	{ thread_self(Tid) },
+	[ '[nan_numerics_prime] (~w) Preparing memory sup. ~d: ...'-[Tid, Sup], flush].
+prolog:message(prime_mem__init_end(_Sup)) -->
+	[ at_same_line, 'done.'-[] ].
+
+:- initialization(
+	(	print_message(informational, prime__init),
+		print_message(informational, prime_whl__init_begin(8)),
+		prime_whl_zero,
+		print_message(informational, prime_whl__init_next(0)),
+		prime_whl_next(1),
+		print_message(informational, prime_whl__init_next(1)),
+		prime_whl_next(2),
+		print_message(informational, prime_whl__init_next(2)),
+		prime_whl_next(3),
+		print_message(informational, prime_whl__init_next(3)),
+		prime_whl_next(4),
+		print_message(informational, prime_whl__init_next(4)),
+		prime_whl_next(5),
+		print_message(informational, prime_whl__init_next(5)),
+		prime_whl_next(6),
+		print_message(informational, prime_whl__init_next(6)),
+		prime_whl_next(7),
+		print_message(informational, prime_whl__init_next(7)),
+		prime_whl_next(8),
+		print_message(informational, prime_whl__init_end(8))
+	), now).										% TODO: Review this! #####
+
+:- thread_initialization(
+	(	print_message(informational, prime_mem__init_begin(100_000)),
+		prime_mem_fill(100_000),
+		print_message(informational, prime_mem__init_end(100_000))
+	)).												% TODO: Review this. #####
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

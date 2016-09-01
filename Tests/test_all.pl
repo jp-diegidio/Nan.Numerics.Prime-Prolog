@@ -70,15 +70,20 @@ test_all(Spec) :-
 	test_all__do(0).
 
 test_all__do(G) :-
-	setup_call_cleanup(
-		prime:prime_whl_lev(Lev),
-		(	prime:prime_whl_zero,
-			prime:prime_whl_next(4),
-			time(G)
-		),
-		(	prime:prime_whl_zero,
-			prime:prime_whl_next(Lev)
-		)
-	).
+	print_message(information, prime_test__whl_lev(4)),
+	time(G).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- multifile
+	prolog:message//1.
+
+prolog:message(prime_test__whl_lev(Lev)) -->
+	[ '[nan_numerics_prime] Wheel lev. ~d:'-[Lev] ].
+
+:- initialization(
+	(	prime:prime_whl_zero,
+		prime:prime_whl_next(4)
+	)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

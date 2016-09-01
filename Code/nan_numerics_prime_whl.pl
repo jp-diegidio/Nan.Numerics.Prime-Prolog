@@ -30,10 +30,10 @@
 
 :- public
 	test_/2,		% +N:posint, -Cert:boolean
+	next_p_/3,		% +W:posint, -P:posint, -Cert:boolean
+	prev_p_/3,		% +W:posint, -P:posint, -Cert:boolean
 	right_/3,		% +N:posint, -P:posint, -Cert:boolean
 	left_/3,		% +N:posint, -P:posint, -Cert:boolean
-	% next_p_/3,		% +W:posint, -P:posint, -Cert:boolean
-	% prev_p_/3,		% +W:posint, -P:posint, -Cert:boolean
 	%%
 	wlev_/1,		% -Lev:nonneg
 	wnext_/1,		% +Lev:nonneg
@@ -68,6 +68,16 @@ the first =4= prime numbers.
 test_(N, Cert) :-
 	w__test(N, Cert).
 
+%	next_p_(+P0:posint, -P:posint, -Cert:boolean) is det.
+
+next_p_(P0, P, Cert) :-
+	w__next_p(P0, P, Cert).
+
+%	prev_p_(+P0:posint, -P:posint, -Cert:boolean) is semidet.
+
+prev_p_(P0, P, Cert) :-
+	w__prev_p(P0, P, Cert).
+
 %!	right_(+N:posint, -P:posint, -Cert:boolean) is det.
 %
 %	P is the smallest candidate prime number greater than or equal to N.
@@ -86,13 +96,6 @@ right_(N, P, Cert) :-
 
 left_(N, P, Cert) :-
 	w__left(N, P, Cert).
-
-
-% next_p_(W, P, Cert) :-
-	% w___next_p(W, P, Cert).
-
-% prev_p_(W, P, Cert) :-
-	% w___prev_p(W, P, Cert).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -125,42 +128,56 @@ wzero_ :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% w___next_p(2, 3, true) :- !.
-% w___next_p(W, P, Cert) :-
-	% w__p0(P0),
-	% w___next_p__do(W, P0, P, Cert).
-
-% w___next_p__do(W, P0, P, true) :-
-	% w__a_is(W, P0), !,
-	% w__a(N).
-% w___next_p__do(N, P0, Cert) :-
-	% w__pL(PL),
-	% w__p_I0(N, P0, PL, I0),
-	% w__p(I0),
-	% w__cert(N, P0, Cert).
-
-
-% w___prev_p(2, _, _) :- !, fail.
-% w___prev_p(P0, P, Cert) :-
-	% w___prev_p(P0, P, Cert).
-
-
 %	w__test(+N:posint, -Cert:boolean) is semidet.
 
 w__test(1, _) :- !, fail.
-w__test(2, true) :- !.
 w__test(N, Cert) :-
 	w__p0(P0),
 	w__test__do(N, P0, Cert).
 
 w__test__do(N, P0, true) :-
 	w__a_is(N, P0), !,
-	w__a(N).
+	w__a(N, _, _).
 w__test__do(N, P0, Cert) :-
 	w__pL(PL),
 	w__p_I0(N, P0, PL, I0),
-	w__p(I0),
+	w__p(I0, _, _),
 	w__cert(N, P0, Cert).
+
+%	w__next_p(+W:posint, -P:posint, -Cert:boolean) is det.
+
+w__next_p(W, P, Cert) :-
+	w__p0(P0),
+	w__next_p__do(W, P0, P, Cert).
+
+w__next_p__do(W, P0, P, true) :-
+	w__a_is(W, P0), !,
+	w__a(W, _, P).
+w__next_p__do(W, P0, P, Cert) :-
+	w__pL(PL),
+	w__p_I0(W, P0, PL, I0),
+	w__p(I0, _, ROff),
+	P is W + ROff,
+	w__cert(P, P0, Cert).
+
+%	w__prev_p(+W:posint, -P:posint, -Cert:boolean) is semidet.
+
+w__prev_p(2, _, _) :- !, fail.
+w__prev_p(W, P, Cert) :-
+	w__p0(P0),
+	w__prev_p__do(W, P0, P, Cert).
+
+w__prev_p__do(W, P0, P, true) :-
+	w__a_is(W, P0), !,
+	w__a(W, P, _).
+w__prev_p__do(P0, P0, P, true) :- !,
+	w__a(P, _, P0).
+w__prev_p__do(W, P0, P, Cert) :-
+	w__pL(PL),
+	w__p_I0(W, P0, PL, I0),
+	w__p(I0, LOff, _),
+	P is W - LOff,
+	w__cert(P, P0, Cert).
 
 %	w__right(+N:posint, -P:posint, -Cert:boolean) is det.
 
@@ -171,6 +188,11 @@ w__right(N, P, Cert) :-
 	w__right__n1(N, N1),
 	w__right__do(N1, P0, P, Cert).
 
+w__right__n1(N, N1) :-
+	N /\ 1 =:= 0, !,
+	N1 is N + 1.
+w__right__n1(N, N).
+
 w__right__do(N1, P0, P, true) :-
 	w__a_is(N1, P0), !,
 	w__right__a(N1, P0, P).
@@ -180,13 +202,8 @@ w__right__do(N1, P0, P, Cert) :-
 	w__right__p(I0, I0, N1, P0, PL, P),
 	w__cert(P, P0, Cert).
 
-w__right__n1(N, N1) :-
-	N /\ 1 =:= 0, !,
-	N1 is N + 1.
-w__right__n1(N, N).
-
 w__right__a(N1, _, N1) :-
-	w__a(N1), !.
+	w__a(N1, _, _), !.
 w__right__a(N1, P0, P) :-
 	N2 is N1 + 2,
 	N2 < P0, !,
@@ -194,7 +211,7 @@ w__right__a(N1, P0, P) :-
 w__right__a(_, P0, P0).
 
 w__right__p(I1, I0, N1, _, _, P) :-
-	w__p(I1), !,
+	w__p(I1, _, _), !,
 	P is N1 + (I1 - I0).
 w__right__p(I1, I0, N1, P0, PL, P) :-
 	I2 is I1 + 2,
@@ -212,6 +229,11 @@ w__left(N, P, Cert) :-
 	w__left__n1(N, N1),
 	w__left__do(N1, P0, P, Cert).
 
+w__left__n1(N, N1) :-
+	N /\ 1 =:= 0, !,
+	N1 is N - 1.
+w__left__n1(N, N).
+
 w__left__do(N1, P0, P, true) :-
 	w__a_is(N1, P0), !,
 	w__left__a(N1, P).
@@ -221,19 +243,14 @@ w__left__do(N1, P0, P, Cert) :-
 	w__left__p(I0, I0, N1, P),
 	w__cert(P, P0, Cert).
 
-w__left__n1(N, N1) :-
-	N /\ 1 =:= 0, !,
-	N1 is N - 1.
-w__left__n1(N, N).
-
 w__left__a(N1, N1) :-
-	w__a(N1), !.
+	w__a(N1, _, _), !.
 w__left__a(N1, P) :-
 	N2 is N1 - 2,
 	w__left__a(N2, P).
 
 w__left__p(I1, I0, N1, P) :-
-	w__p(I1), !,
+	w__p(I1, _, _), !,
 	P is N1 - (I0 - I1).
 w__left__p(I1, I0, N1, P) :-
 	I2 is I1 - 2,
@@ -260,15 +277,31 @@ w__cert(_, _, false).
 %	w__lev(-Lev:nonneg) is det.
 %	w__p0(-P0:posint) is det.
 %	w__pL(-PL:posint) is det.
-%	w__a(-N:posint) is nondet.
-%	w__p(-I0:nonneg) is multi.
+%	w__a(-P:posint, -L:posint, -R:posint) is nondet.
+%	w__p(-I0:nonneg, -LOff:posint, -ROff:posint) is multi.
 
 :- dynamic
 	w__lev/1,
 	w__p0/1,
 	w__pL/1,
-	w__a/1,
-	w__p/1.
+	w__a/3,
+	w__p/3.
+
+% prime_whl:w__zero,prime_whl:w__list.
+% prime_whl:w__next,prime_whl:w__list.
+% between(1,30,N),prime_whl:w__test(N,Cert),writeln([N,Cert]),fail;true.
+
+%	w__stat is det.
+
+w__stat :-
+	w__lev(Lev), w__p0(P0), w__pL(PL), format('L(~d, ~d, ~d)~n', [Lev, P0, PL]).
+
+%	w__list is det.
+
+w__list :-
+	w__stat,
+	forall(w__a(P, L, R), format('A(~d, ~d, ~d)~n', [P, L, R])),
+	forall(w__p(I0, LOff, ROff), format('P(~d, ~d, ~d)~n', [I0, LOff, ROff])).
 
 %	w__zero is det.
 
@@ -276,12 +309,12 @@ w__zero :-
 	retractall(w__lev(_)),
 	retractall(w__p0(_)),
 	retractall(w__pL(_)),
-	retractall(w__a(_)),
-	retractall(w__p(_)),
+	retractall(w__a(_, _, _)),
+	retractall(w__p(_, _, _)),
 	assertz(w__lev(0)),
 	assertz(w__p0(2)),
 	assertz(w__pL(1)),
-	assertz(w__p(0)).
+	assertz(w__p(0, 1, 1)).
 
 %	w__next is det.
 
@@ -289,43 +322,61 @@ w__next :-
 	retract(w__lev(Lev)),
 	retract(w__p0(P0)),
 	retract(w__pL(PL)),
-	assertz(w__a(P0)),
-	w__next__ps(PL, IOff, Ps),
-	w__next__rs(0, P0, PL, IOff, Ps),
-	w__next__ll(Lev, P0, PL, IOff).
+	w__next__L0(P0, L0),
+	w__next__as(P0, L0),
+	w__next__ps(P0, PL, P1, Ps),
+	w__next__rs(0, 0, Ps, P0, (P1, PL), (fail, 0)),
+	w__next__ls(Lev, P0, P1, PL).
 
-w__next__ps(PL, IOff, Ps) :-
-	retract(w__p(0)),
-	assertz(w__p(PL)),
-	once(w__p(IOff)),
-	findall(I0,
-	(	retract(w__p(I)),
-		I0 is I - IOff
+w__next__L0(P0, L0) :-
+	w__a(L0, _, P0), !.
+w__next__L0(_, 1).
+
+w__next__as(P0, L0) :-
+	w__p(0, _, ROff0),
+	R0 is P0 + ROff0,
+	assertz(w__a(P0, L0, R0)).
+
+w__next__ps(P0, PL, P1, Ps) :-
+	retract(w__p(0, LOff0, ROff0)),
+	assertz(w__p(PL, LOff0, ROff0)),
+	once(w__p(IOff, _, _)),
+	P1 is P0 + IOff,
+	findall((I1, LOff, ROff),
+	(	retract(w__p(I0, LOff, ROff)),
+		I1 is I0 - IOff
 	), Ps).
 
-w__next__rs(P0, P0, _, _, _) :- !.
-w__next__rs(N0, P0, PL, IOff, Ps) :-
-	A0 is N0 * PL,
-	L0 is A0 + P0 + IOff,
-	w__next__qs(Ps, P0, A0, L0),
+w__next__rs(P0, _, _, P0, _, (_, LOffp0)) :- !,
+	once(retract(w__p(I0, LOff, ROff))),
+	LOff1 is LOff + LOffp0,
+	asserta(w__p(I0, LOff1, ROff)).
+w__next__rs(N0, A0, Ps, P0, (P1, PL), ILOffp0) :-
+	L0 is A0 + P1,
+	w__next__qs(Ps, (P0, A0, L0), ILOffp0, ILOffp1),
 	N1 is N0 + 1,
-	w__next__rs(N1, P0, PL, IOff, Ps).
+	A1 is A0 + PL,
+	w__next__rs(N1, A1, Ps, P0, (P1, PL), ILOffp1).
 
-w__next__qs([], _, _, _).
-w__next__qs([I0| Ps], P0, A0, L0) :-
+w__next__qs([], _, ILOffp0, ILOffp0).
+w__next__qs([(I0, LOff, ROff)| Ps], (P0, A0, L0), (_, LOffp0), ILOffp1) :-
 	(I0 + L0) mod P0 =\= 0, !,
 	I1 is I0 + A0,
-	assertz(w__p(I1)),
-	w__next__qs(Ps, P0, A0, L0).
-w__next__qs([_| Ps], P0, A0, L0) :-
-	w__next__qs(Ps, P0, A0, L0).
+	LOff1 is LOff + LOffp0,
+	assertz(w__p(I1, LOff1, ROff)),
+	w__next__qs(Ps, (P0, A0, L0), (I1, 0), ILOffp1).
+w__next__qs([(I0, LOff, ROff)| Ps], PAL0, (Ip0, LOffp0), ILOffp1) :-
+	retract(w__p(Ip0, LOffp, ROffp)),
+	ROffp1 is ROffp + ROff,
+	assertz(w__p(Ip0, LOffp, ROffp1)),
+	LOff1 is LOff + LOffp0,
+	w__next__qs(Ps, PAL0, (I0, LOff1), ILOffp1).
 
-w__next__ll(Lev, P0, PL, IOff) :-
+w__next__ls(Lev, P0, P1, PL) :-
 	Lev1 is Lev + 1,
-	P01 is P0 + IOff,
 	PL1 is P0 * PL,
 	assertz(w__lev(Lev1)),
-	assertz(w__p0(P01)),
+	assertz(w__p0(P1)),
 	assertz(w__pL(PL1)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
