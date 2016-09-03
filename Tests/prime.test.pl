@@ -230,8 +230,10 @@ test(prime_file__1000,
 	% Keep file for inspection
 	true((C, H) == (TC0, TH))
 ]) :-
-	prime_save_file(File, 100), write(w),
-	prime_load_file(File), write(r),
+	prime_save_file(File, 100),
+	print_message(information, prime_test:file__type(w)),
+	prime_load_file(File),
+	print_message(information, prime_test:file__type(r)),
 	prime_mem_count(C),
 	prime_mem:max_(H).
 
@@ -244,8 +246,10 @@ test(prime_file__1000,
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
-	prime_save_file(File, 1000), write(w),
-	prime_load_file(File), write(r),
+	prime_save_file(File, 1000),
+	print_message(information, prime_test:file__type(w)),
+	prime_load_file(File),
+	print_message(information, prime_test:file__type(r)),
 	prime_mem_count(C),
 	prime_mem:max_(H).
 
@@ -258,8 +262,10 @@ test(prime_file__1000_sup,
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
-	prime_save_file(File, 1000), write(w),
-	prime_load_file(File, 100), write(r),
+	prime_save_file(File, 1000),
+	print_message(information, prime_test:file__type(w)),
+	prime_load_file(File, 100),
+	print_message(information, prime_test:file__type(r)),
 	prime_mem_count(C),
 	prime_mem:max_(H).
 
@@ -272,8 +278,10 @@ test(prime_file__1000_max,
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
-	prime_save_file(File, 1000), write(w),
-	prime_load_file(File, TH), write(r),
+	prime_save_file(File, 1000),
+	print_message(information, prime_test:file__type(w)),
+	prime_load_file(File, TH),
+	print_message(information, prime_test:file__type(r)),
 	prime_mem_count(C),
 	prime_mem:max_(H).
 
@@ -295,6 +303,14 @@ t__stream__invalid(Stream) :-
 	write(Stream, '2,3,7,11.').
 
 :- end_tests(prime_file).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- multifile
+	prolog:message//1.
+
+prolog:message(prime_test:file__type(Type)) -->
+	[ at_same_line, Type-[], flush ].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

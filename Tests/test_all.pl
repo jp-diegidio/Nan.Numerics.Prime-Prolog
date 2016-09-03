@@ -34,7 +34,7 @@
 Predicates to run all tests.  (Entry point for SWI pack system.)
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
@@ -58,10 +58,11 @@ Predicates to run all tests.  (Entry point for SWI pack system.)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %!	test_all is det.
-%!	test_all(+Spec) is det.
 
 test_all :-
 	test_all__do(run_tests).
+
+%!	test_all(+Spec) is det.
 
 test_all(Spec) :-
 	test_all__do(run_tests(Spec)).
@@ -70,20 +71,15 @@ test_all(Spec) :-
 	test_all__do(0).
 
 test_all__do(G) :-
-	print_message(information, prime_test__whl_lev(4)),
+	prime:prime_whl_init(4),
 	time(G).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 :- multifile
-	prolog:message//1.
+	user:message_hook/3.
 
-prolog:message(prime_test__whl_lev(Lev)) -->
-	[ '[nan_numerics_prime] Wheel lev. ~d:'-[Lev] ].
-
-:- initialization(
-	(	prime:prime_whl_zero,
-		prime:prime_whl_next(4)
-	)).
+user:message_hook(prime_mem:fill_begin(_), _, _).
+user:message_hook(prime_mem:fill_end, _, _).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -58,7 +58,7 @@ For info on the implementation, see library(nan_numerics_prime).
 arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 @see		library(nan_numerics_prime)
@@ -258,8 +258,8 @@ right_(N, P) :-
 right__sel(Cert, P, P) :-
 	test__do(Cert, P), !.
 right__sel(_, W, P) :-
-	prime_whl:next_p_(W, W1, Cert),
-	right__sel(Cert, W1, P).
+	W1 is W + 2,
+	right_(W1, P).
 
 %!	left_(+N:posint, -P:prime) is semidet.
 %
@@ -273,8 +273,8 @@ left_(N, P) :-
 left__sel(Cert, P, P) :-
 	test__do(Cert, P), !.
 left__sel(_, W, P) :-
-	prime_whl:prev_p_(W, W1, Cert),
-	left__sel(Cert, W1, P).
+	W1 is W - 2,
+	left_(W1, P).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

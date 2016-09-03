@@ -35,6 +35,7 @@
 	add_/2,			% +P1:prime, +P2:prime
 	count_/1,		% -Cnt:nonneg
 	max_/1,			% -Max:prime
+	fill_/2,		% :G:callable, +Sup:posint
 	clear_/0.		% 
 
 /** <module> A simple prime number library :: memoization
@@ -105,6 +106,18 @@ count_(Cnt) :-
 max_(Max) :-
 	flag_get_('Nan.Numerics.Prime::mem_max', Max).
 
+%!	fill_(:G:callable, +Sup:posint) is det.
+%
+%	Wraps G with information messages.  G must do the actual filling.
+
+:- meta_predicate
+	fill_(0, +).
+
+fill_(G, Sup) :-
+	print_message(information, prime_mem:fill_begin(Sup)),
+	call(G),
+	print_message(information, prime_mem:fill_end).
+
 %!	clear_ is det.
 %
 %	Clears all memoization.
@@ -158,6 +171,17 @@ flag_set_(Key, Old, New) :-
 
 flag_clear_(Key) :-
 	nb_delete(Key).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- multifile
+	prolog:message//1.
+
+prolog:message(prime_mem:fill_begin(Sup)) -->
+	{ thread_self(Tid) },
+	[ 'nan_numerics_prime: (~w) Filling memory [Sup=~d]: .'-[Tid, Sup], flush ].
+prolog:message(prime_mem:fill_end) -->
+	[ at_same_line, 'done.'-[] ].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
