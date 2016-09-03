@@ -24,8 +24,11 @@
 
 % (SWI-Prolog 7.3.25)
 
-% TODO: Fix synchronization.
-% TODO: Fix callable type.
+% TODO: Implement dynamic memoization.
+% TODO: Fix synchronization and visibility.
+% TODO: Upgrade infos to MD format.
+
+% TODO: Implement parallel factoring functions.
 % TODO: Implement prime counting/n-th prime functions.
 % TODO: Implement probabilitic test error estimates?
 % TODO: Implement option for num. of probabilistic iterations?
@@ -112,7 +115,7 @@ Usage example:
 @version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
-@tbd		Fix synchronization.
+@tbd		Implement parallel factoring functions.
 @tbd		Implement prime counting/n-th prime functions.
 @tbd		Implement probabilitic test error estimates?
 @tbd		Implement option for num. of probabilistic iterations?
