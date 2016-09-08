@@ -127,44 +127,6 @@ test(right_next__c,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime_fill, [setup(prime_mem_clear)]).
-
-test(prime_fill__1,
-[	true((C, H) == (0, 2))
-]) :-
-	prime_mem_fill(1),
-	prime_mem_count(C),
-	prime_mem:max_(H).
-
-test(prime_fill__2,
-[	true((C, H) == (0, 2))
-]) :-
-	prime_mem_fill(2),
-	prime_mem_count(C),
-	prime_mem:max_(H).
-
-test(prime_fill__3,
-[	true((C, H) == (1, 3))
-]) :-
-	prime_mem_fill(3),
-	prime_mem_count(C),
-	prime_mem:max_(H).
-
-test(prime_fill__1000,
-[	setup((
-		t__1e3(TC, TH, _),
-		TC0 is TC - 1
-	)),
-	true((C, H) == (TC0, TH))
-]) :-
-	prime_mem_fill(1000),
-	prime_mem_count(C),
-	prime_mem:max_(H).
-
-:- end_tests(prime_fill).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 :- begin_tests(prime_gen, [setup(prime_mem_clear)]).
 
 test(prime_gen__1_1,
@@ -219,18 +181,176 @@ test(prime_gen__1_1e4,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(prime_file, [setup(prime_mem_clear)]).
+:- begin_tests(prime_fill_1).
 
-test(prime_file__1000,
+test(prime_fill_1__1,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_1__2,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(2),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_1__3,
+[	true((C, H) == (1, 3))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(3),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_1__4,
+[	true((C, H) == (1, 3))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(4),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_1__5,
+[	true((C, H) == (2, 5))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(5),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_1__1000,
+[	setup((
+		t__1e3(TC0, TH, _)
+	)),
+	true((C, H) == (TC0, TH))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1000),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+:- end_tests(prime_fill_1).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- begin_tests(prime_fill_2).
+
+test(prime_fill_2__1_1,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1, 1),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__1_2,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1, 2),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__2_2,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1, 2),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__1_3,
+[	true((C, H) == (1, 3))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(1, 3),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__2_3,
+[	true((C, H) == (1, 3))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(2, 3),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__3_3,
+[	true((C, H) == (1, 3))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(3),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__4_3_e,
+[	true((C, H) == (0, 2))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(4, 3),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__5_15,
+[	true((C, H) == (3, 13))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(5, 15),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_fill_2__100_1000,
+[	setup((
+		t__1e2(TC02, _, _),
+		t__1e3(TC03, TH, _),
+		TC0 is TC03 - TC02 - 1
+	)),
+	true((C, H) == (TC0, TH))
+]) :-
+	prime_mem_clear,
+	prime_mem_fill(100, 1000),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+:- end_tests(prime_fill_2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- begin_tests(prime_file).
+
+test(prime_file__100,
 [	setup((
 		File = 'prime_100.txt',
-		t__1e2(TC, TH, _),
-		TC0 is TC - 1
+		t__1e2(TC0, TH, _)
 	)),
 	% Keep file for inspection
 	true((C, H) == (TC0, TH))
 ]) :-
+	prime_mem_clear,
 	prime_save_file(File, 100),
+	print_message(information, prime_test:file__type(w)),
+	prime_load_file(File),
+	print_message(information, prime_test:file__type(r)),
+	prime_mem_count(C),
+	prime_mem:max_(H).
+
+test(prime_file__100_1000,
+[	setup((
+		File = 'prime_100_1000.txt',
+		t__1e2(TC02, _, _),
+		t__1e3(TC03, TH, _),
+		TC0 is TC03 - TC02 - 1
+	)),
+	% Keep file for inspection
+	true((C, H) == (TC0, TH))
+]) :-
+	prime_mem_clear,
+	prime_save_file(File, 100, 1000),
 	print_message(information, prime_test:file__type(w)),
 	prime_load_file(File),
 	print_message(information, prime_test:file__type(r)),
@@ -240,12 +360,12 @@ test(prime_file__1000,
 test(prime_file__1000,
 [	setup((
 		File = 'prime_1000.txt',
-		t__1e3(TC, TH, _),
-		TC0 is TC - 1
+		t__1e3(TC0, TH, _)
 	)),
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
+	prime_mem_clear,
 	prime_save_file(File, 1000),
 	print_message(information, prime_test:file__type(w)),
 	prime_load_file(File),
@@ -256,12 +376,12 @@ test(prime_file__1000,
 test(prime_file__1000_sup,
 [	setup((
 		File = 'prime_1000_sup.txt',
-		t__1e2(TC, TH, _),
-		TC0 is TC - 1
+		t__1e2(TC0, TH, _)
 	)),
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
+	prime_mem_clear,
 	prime_save_file(File, 1000),
 	print_message(information, prime_test:file__type(w)),
 	prime_load_file(File, 100),
@@ -272,12 +392,12 @@ test(prime_file__1000_sup,
 test(prime_file__1000_max,
 [	setup((
 		File = 'prime_1000_max.txt',
-		t__1e2(TC, TH, _),
-		TC0 is TC - 1
+		t__1e3(TC0, TH, _)
 	)),
 	cleanup(delete_file(File)),
 	true((C, H) == (TC0, TH))
 ]) :-
+	prime_mem_clear,
 	prime_save_file(File, 1000),
 	print_message(information, prime_test:file__type(w)),
 	prime_load_file(File, TH),
@@ -291,8 +411,9 @@ test(prime_file__invalid,
 		t__file__invalid(File)
 	)),
 	cleanup(delete_file(File)),
-	error(syntax_error(invalid_consec))
+	error(syntax_error(invalid_format), file('prime_invalid.txt', 1, 4, 4))
 ]) :-
+	prime_mem_clear,
 	prime_load_file(File).
 
 t__file__invalid(File) :-
@@ -300,7 +421,7 @@ t__file__invalid(File) :-
 	prime_pio:open_(File, write, Mod:t__stream__invalid).
 
 t__stream__invalid(Stream) :-
-	write(Stream, '2,3,7,11.').
+	write(Stream, '2,3,a,7,11').
 
 :- end_tests(prime_file).
 
@@ -318,13 +439,13 @@ t__p1(123456789012345678901234567890123456789012345678839).
 t__c_(123456789012345678901234567890123456789012345679033).
 t__p2(123456789012345678901234567890123456789012345679141).
 
-t__1e2(25, 97,
+t__1e2(24, 97,
 [	2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 	31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
 	73, 79, 83, 89, 97
 ]).
 
-t__1e3(168, 997,
+t__1e3(167, 997,
 [	2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 	31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
 	73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
@@ -344,7 +465,7 @@ t__1e3(168, 997,
 	947, 953, 967, 971, 977, 983, 991, 997
 ]).
 
-t__1e4(10000, 104729,
+t__1e4(9999, 104729,
 [	2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 	31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
 	73, 79, 83, 89, 97, 101, 103, 107, 109, 113,

@@ -29,9 +29,9 @@
 		test_all/1		% +Spec
 	]).
 
-/** <module> A simple prime number library :: test
+/** <module> A simple prime number library :: All tests
 
-Predicates to run all tests.  (Entry point for SWI pack system.)
+Predicates to run all tests.  (Entry point for SWI-Prolog pack system.)
 
 @author		Julio P. Di Egidio
 @version	1.3.0-beta
@@ -41,11 +41,14 @@ Predicates to run all tests.  (Entry point for SWI pack system.)
 
 :- use_module(library(plunit)).
 
-:- consult('prime_mem.test').
-:- consult('prime_whl.test').
-:- consult('prime_prb.test').
-:- consult('prime_lgc.test').
-:- consult('prime.test').
+:- use_module(prime_pio_test).
+:- use_module(prime_mem_test).
+:- use_module(prime_whl_test).
+:- use_module(prime_prb_test).
+:- use_module(prime_lgc_test).
+% :- use_module(prime_test).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 :- set_test_options(			% TODO: Check integration with SWI pack system. #####
 	[	load(always),
@@ -55,14 +58,20 @@ Predicates to run all tests.  (Entry point for SWI pack system.)
 		cleanup(false)
 	]).
 
+t__rnd_seed(0).		% Fixed for testing
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %!	test_all is det.
+%
+%	Prepares the test context then calls time/1 around run_tests/0.
 
 test_all :-
 	test_all__do(run_tests).
 
 %!	test_all(+Spec) is det.
+%
+%	Prepares the test context then calls time/1 around run_tests/1.
 
 test_all(Spec) :-
 	test_all__do(run_tests(Spec)).
@@ -71,7 +80,10 @@ test_all(Spec) :-
 	test_all__do(0).
 
 test_all__do(G) :-
-	prime:prime_whl_init(4),
+	t__rnd_seed(RndSeed),
+	set_random(seed(RndSeed)),
+	prime_whl_test:lev_(WLev),
+	prime_whl:init_(WLev),
 	time(G).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,7 +91,11 @@ test_all__do(G) :-
 :- multifile
 	user:message_hook/3.
 
-user:message_hook(prime_mem:fill_begin(_), _, _).
-user:message_hook(prime_mem:fill_end, _, _).
+user:message_hook(prime_whl:init_begin(Lev), silent, _) :-
+	print_message(informational, prime_whl:init_begin(Lev)).
+user:message_hook(prime_whl:init_next(Lev0), silent, _) :-
+	print_message(informational, prime_whl:init_next(Lev0)).
+user:message_hook(prime_whl:init_end(Lev0), silent, _) :-
+	print_message(informational, prime_whl:init_end(Lev0)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

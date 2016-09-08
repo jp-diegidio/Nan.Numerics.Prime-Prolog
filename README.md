@@ -41,11 +41,7 @@ Usage example:
     true.
 
     ?- time(prime_right(1234567891012345678901234567890123456789011111, P)).
-    % 1,010 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
-    P = 1234567891012345678901234567890123456789011139.
-
-    ?- time(prime_lgc:right_(1234567891012345678901234567890123456789011111, P)).
-    % 1,006 inferences, 0.000 CPU in 0.000 seconds (?% CPU, Infinite Lips)
+    % 1,227 inferences, 0.000 CPU in 0.010 seconds (0% CPU, Infinite Lips)
     P = 1234567891012345678901234567890123456789011139.
     ==
 

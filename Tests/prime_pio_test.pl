@@ -24,131 +24,130 @@
 
 % (SWI-Prolog 7.3.25)
 
-/*	A simple prime number library :: pure I/O
+:- module(prime_pio_test, []).
+
+/** <module> A simple prime number library :: Pure I/O tests
+
+Tests for module =prime_pio=.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
 :- use_module(library(plunit)).
 
-:- ensure_loaded(module_inc).
-:- module_inc('nan_numerics_prime_pio.pl').
+:- use_module(loader).
+:- loader:load_module('nan_numerics_prime_pio.pl').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+t__parse(In) :-
+	context_module(Mod),
+	atom_codes(In, Codes),
+	phrase(prime_pio:parse_(Mod:t__gadd), Codes, _).	% NOTE: phrase/3!
+
+t__gadd(_, P) :- P < 5.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 :- begin_tests('prime_pio:parse_').
 
-test(parse__p0_f_e,
-[	error(syntax_error(invalid_start))
+test(parse__0,
+[	true
 ]) :-
 	t__parse('').
 
-test(parse__p0_f_a,
-[	error(syntax_error(invalid_start))
+test(parse__0_b,
+[	true
 ]) :-
-	t__parse('a').
+	t__parse(' ').
 
-test(parse__p0_f_1,
-[	error(syntax_error(invalid_start))
-]) :-
-	t__parse('1').
-
-test(parse__p0_f_2,
-[	error(syntax_error(invalid_format))
+test(parse__1,
+[	true
 ]) :-
 	t__parse('2').
 
-test(parse__p0_f_2a,
-[	error(syntax_error(invalid_format))
+test(parse__1_b,
+[	true
 ]) :-
-	t__parse('2-').
+	t__parse(' 2 ').
 
-test(parse__p0_f_2c,
-[	error(syntax_error(invalid_value))
-]) :-
-	t__parse('2,').
-
-test(parse__p_f_a,
-[	error(syntax_error(invalid_value))
-]) :-
-	t__parse('2,a').
-
-test(parse__p_f_2,
-[	error(syntax_error(invalid_format))
+test(parse__2,
+[	true
 ]) :-
 	t__parse('2,3').
 
-test(parse__p_f_2a,
-[	error(syntax_error(invalid_format))
+test(parse__2_b,
+[	true
 ]) :-
-	t__parse('2,3-').
+	t__parse(' 2 , 3 ').
 
-test(parse__p_f_2c,
-[	error(syntax_error(invalid_value))
+test(parse__max,
+[	true
+]) :-
+	t__parse('2,3,5,7').
+
+test(parse__1_f_a,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse('a').
+
+test(parse__1_f_c,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse(',').
+
+test(parse__2_f_a,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse('2a').
+
+test(parse__2_f_c,
+[	error(syntax_error(invalid_format), end_of_file - 0)
+]) :-
+	t__parse('2,').
+
+test(parse__3_f_a,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse('2,a').
+
+test(parse__3_f_c,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse('2,,').
+
+test(parse__3_f_a1,
+[	error(syntax_error(invalid_format), end_of_file - 5)
+]) :-
+	t__parse('a,2,3').
+
+test(parse__3_f_a2,
+[	error(syntax_error(invalid_format), end_of_file - 3)
+]) :-
+	t__parse('2,a,3').
+
+test(parse__3_f_a3,
+[	error(syntax_error(invalid_format), end_of_file - 1)
+]) :-
+	t__parse('2,3,a').
+
+test(parse__3_f_c1,
+[	error(syntax_error(invalid_format), end_of_file - 4)
+]) :-
+	t__parse(',2,3').
+
+test(parse__3_f_c2,
+[	error(syntax_error(invalid_format), end_of_file - 2)
+]) :-
+	t__parse('2,,3').
+
+test(parse__3_f_c3,
+[	error(syntax_error(invalid_format), end_of_file - 0)
 ]) :-
 	t__parse('2,3,').
-
-test(parse__p_f_2b_1,
-[	error(syntax_error(invalid_start))
-]) :-
-	t__parse(' 2,3.').
-
-test(parse__p_f_2b_2,
-[	error(syntax_error(invalid_format))
-]) :-
-	t__parse('2 ,3.').
-
-test(parse__p_f_2b_3,
-[	error(syntax_error(invalid_value))
-]) :-
-	t__parse('2, 3.').
-
-test(parse__p_f_2b_4,
-[	error(syntax_error(invalid_format))
-]) :-
-	t__parse('2,3 .').
-
-test(parse__p_f_2b_5,
-[	error(syntax_error(invalid_format))
-]) :-
-	t__parse('2,3. ').
-
-test(parse__p0,
-[	true
-]) :-
-	t__parse('2.').
-
-test(parse__p1,
-[	true
-]) :-
-	t__parse('2,3.').
-
-test(parse__p2,
-[	true
-]) :-
-	t__parse('2,3,5.').
-
-test(parse__p2_Max,
-[	true
-]) :-
-	t__parse('2,3,5.', 3).
-
-t__parse(A) :-
-	context_module(Mod),
-	atom_codes(A, Codes),
-	phrase(prime_pio:parse_(Mod:t__gadd), Codes, _).
-
-t__parse(A, Max) :-
-	context_module(Mod),
-	atom_codes(A, Codes),
-	phrase(prime_pio:parse_(Mod:t__gadd(Max)), Codes, _).
-
-t__gadd(_, _).
-
-t__gadd(Max, _, P) :- P =< Max.
 
 :- end_tests('prime_pio:parse_').
 

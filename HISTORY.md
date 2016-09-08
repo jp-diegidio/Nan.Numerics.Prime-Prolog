@@ -12,8 +12,11 @@ Version 1.3.0-beta:
 - Implemented dynamic wheel.
 - Fixed synchronization and visibility.
 - Upgraded infos to MD format.
+- BREAKING: Removed prime_gen/2 and prime_gen_rev/2.
 - BREAKING: prime_whl_init/1 supersedes ... # TODO: #####.
-- BREAKING: prime_mem_init/1 supersedes ... # TODO: #####.
+- BREAKING: prime_mem_fill/2 supersedes ... # TODO: #####.
+- BREAKING: No more dot at end of file ... # TODO: #####.
+- BREAKING: prime_fact/2 becomes semidet ... # TODO: #####.
 
 Version 1.2.5-beta:
 -------------------

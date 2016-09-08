@@ -24,7 +24,20 @@
 
 % (SWI-Prolog 7.3.25)
 
-/*	A simple prime number library :: wheel
+:- module(prime_whl_test, []).
+
+:- public
+	lev_/1.				% -Lev:nonneg
+
+/** <module> A simple prime number library :: Wheel tests
+
+Tests for module =prime_whl=.
+
+*NOTE*: Running tests in this module will throw an error if the wheel is
+not at the level returned by lev_/1.  The error is of the form
+=|error(prime_whl_test:lev(TLev, WLev), _)|=,
+where _TLev_ is the wheel level required for testing and _WLev_ is the
+actual wheel level.
 
 @author		Julio P. Di Egidio
 @version	1.3.0-beta
@@ -34,62 +47,35 @@
 
 :- use_module(library(plunit)).
 
-:- ensure_loaded(module_inc).
-:- module_inc('nan_numerics_prime_whl.pl').
+:- use_module(loader).
+:- loader:load_module('nan_numerics_prime_whl.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% t__set(Lev) :-
-	% prime_whl:((
-		% wzero_,
-		% wnext_(Lev)
-	% )).
+%!	lev_(-Lev:nonneg) is det.
+%
+%	Lev is the wheel level required for testing.  This is fixed at =4=.
 
-% t__get(Lev, P0, PL, Ns, Is) :-
-	% prime_whl:((
-		% w__lev(Lev),
-		% w__p0(P0),
-		% w__pL(PL),
-		% findall(N, w__a(N), Ns),
-		% findall(I, w__p(I), Is)
-	% )).
+lev_(4).		% Fixed for testing
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+lev__check :-
+	lev_(TLev),
+	prime_whl:lev_(WLev),
+	lev__check(TLev, WLev).
 
-% :- begin_tests('prime_whl:wheel_',
-	% [	setup(prime_whl:w__lev(Lev)),
-		% cleanup(t__set(Lev))
-	% ]).
+lev__check(TLev, TLev) :- !.
+lev__check(TLev, WLev) :-
+	throw(error(prime_whl_test:lev(TLev, WLev), _)).
 
-% test(wheel__0,
-% [	true((Lev, P0, PL, Ns, Is) == (0, 2, 1, [], [0]))
-% ]) :-
-	% t__set(0),
-	% t__get(Lev, P0, PL, Ns, Is).
+:- multifile
+	prolog:message//1.
 
-% test(wheel__1,
-% [	true((Lev, P0, PL, Ns, Is) == (1, 3, 2, [2], [0]))
-% ]) :-
-	% t__set(1),
-	% t__get(Lev, P0, PL, Ns, Is).
-
-% test(wheel__2,
-% [	true((Lev, P0, PL, Ns, Is) == (2, 5, 6, [2, 3], [0, 2]))
-% ]) :-
-	% t__set(2),
-	% t__get(Lev, P0, PL, Ns, Is).
-
-% test(wheel__3,
-% [	true((Lev, P0, PL, Ns, Is) == (3, 7, 30, [2, 3, 5], [0, 4, 6, 10, 12, 16, 22, 24]))
-% ]) :-
-	% t__set(3),
-	% t__get(Lev, P0, PL, Ns, Is).
-
-% :- end_tests('prime_whl:wheel_').
+prolog:message(error(prime_whl_test:lev(TLev, WLev), _)) -->
+	[ 'Wheel level must be ~d, was ~d.'-[TLev, WLev] ].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests('prime_whl:test_').
+:- begin_tests('prime_whl:test_', [setup(lev__check)]).
 
 test(test__1,
 [	fail
@@ -136,6 +122,21 @@ test(test__12,
 ]) :-
 	prime_whl:test_(12, _).
 
+test(test__112,
+[	fail
+]) :-
+	prime_whl:test_(112, _).
+
+test(test__113,
+[	true(Cert == true)
+]) :-
+	prime_whl:test_(113, Cert).
+
+test(test__114,
+[	fail
+]) :-
+	prime_whl:test_(114, _).
+
 test(test__120,
 [	fail
 ]) :-
@@ -150,11 +151,6 @@ test(test__122,
 [	fail
 ]) :-
 	prime_whl:test_(122, _).
-
-test(test__219,
-[	fail
-]) :-
-	prime_whl:test_(219, _).
 
 test(test__220,
 [	fail
@@ -175,7 +171,7 @@ test(test__222,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests('prime_whl:right_').
+:- begin_tests('prime_whl:right_', [setup(lev__check)]).
 
 test(right__1,
 [	true((W, Cert) == (2, true))
@@ -196,6 +192,16 @@ test(right__4,
 [	true((W, Cert) == (5, true))
 ]) :-
 	prime_whl:right_(4, W, Cert).
+
+test(right__5,
+[	true((W, Cert) == (5, true))
+]) :-
+	prime_whl:right_(5, W, Cert).
+
+test(right__6,
+[	true((W, Cert) == (7, true))
+]) :-
+	prime_whl:right_(6, W, Cert).
 
 test(right__10,
 [	true((W, Cert) == (11, true))
@@ -242,11 +248,6 @@ test(right__122,
 ]) :-
 	prime_whl:right_(122, W, Cert).
 
-test(right__219,
-[	true((W, Cert) == (221, false))
-]) :-
-	prime_whl:right_(219, W, Cert).
-
 test(right__220,
 [	true((W, Cert) == (221, false))
 ]) :-
@@ -266,7 +267,7 @@ test(right__222,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests('prime_whl:left_').
+:- begin_tests('prime_whl:left_', [setup(lev__check)]).
 
 test(left__1,
 [	fail
@@ -313,6 +314,21 @@ test(left__12,
 ]) :-
 	prime_whl:left_(12, W, Cert).
 
+test(left__112,
+[	true((W, Cert) == (109, true))
+]) :-
+	prime_whl:left_(112, W, Cert).
+
+test(left__113,
+[	true((W, Cert) == (113, true))
+]) :-
+	prime_whl:left_(113, W, Cert).
+
+test(left__114,
+[	true((W, Cert) == (113, true))
+]) :-
+	prime_whl:left_(114, W, Cert).
+
 test(left__120,
 [	true((W, Cert) == (113, true))
 ]) :-
@@ -327,11 +343,6 @@ test(left__122,
 [	true((W, Cert) == (121, false))
 ]) :-
 	prime_whl:left_(122, W, Cert).
-
-test(left__219,
-[	true((W, Cert) == (211, false))
-]) :-
-	prime_whl:left_(219, W, Cert).
 
 test(left__220,
 [	true((W, Cert) == (211, false))

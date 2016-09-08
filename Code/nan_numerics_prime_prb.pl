@@ -32,27 +32,33 @@
 :- public
 	test_/2,		% +N:posint, -Cert:boolean
 	det_max_/1,		% -Max:posint
-	prb_mul_/1.		% -Mul:posint
+	prb_rep_/1.		% -Rep:posint
 
-/** <module> A simple prime number library :: probabilistic
+/** <module> A simple prime number library :: Probabilistic
 
-Module =prime_prb= provides low-level predicates to test candidate
-primality of numbers based on a probabilistic primality test.
+*|Nan.Numerics.Prime (nan_numerics_prime.pl)|*
 
-Implements a variant of the *Miller-Rabin* primality test that is
-_deterministic_ for numbers up to =3317044064679887385961980=, otherwise
-it is _probabilistic_ with the number of iterations fixed at =20=.
+Module =prime_prb= (nan_numerics_prime_prb.pl)
+provides low-level predicates to test candidate primality of positive
+integer numbers based on a variant of the *|Miller-Rabin|* test that is
+_deterministic_ for numbers up to =3317044064679887385961980=, otherwise it
+is _probabilistic_ with the number of iterations fixed at =20=.
 
-*NOTE*: Predicates in this module are not meant for public use.
+Predicates in this module can be safely called concurrently.
+
+*NOTE*: Predicates in this module are _unsafe_, i.e. do not validate input
+arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
+@see		https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 @tbd		Implement test error estimates?
 @tbd		Implement option for num. of iterations?
 */
 
+:- use_module(library(debug)).
 :- use_module(library(random)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,10 +68,12 @@ it is _probabilistic_ with the number of iterations fixed at =20=.
 %	True if N is a candidate prime number.
 %
 %	Cert is =true= if N is certainly prime, otherwise it is =false=.
+%
+%	This predicate can be safely called concurrently.
 
+test_(1, _) :- !, fail.
 test_(2, true) :- !.
 test_(N, Cert) :-
-	N > 2,
 	test_as_(N, As, Cert),
 	\+ comp_as_(N, As).
 
@@ -79,64 +87,74 @@ test_as_(N, As, false) :-
 %	comp_as_(+N:posint +As:list(prime)) is semidet.
 
 comp_as_(N, As) :-
-	calc_n0sd_(N, N0, S0, D),
-	comp_as_(As, N0, S0, D).
+	calc_nrd_(N, N0, R0, D),
+	comp_as__do(As, (N, N0, R0, D)).
 
-comp_as_([A| _], N0, S0, D) :-
-	comp_a_(A, N0, S0, D), !.
-comp_as_([_| As], N0, S0, D) :-
-	comp_as_(As, N0, S0, D).
+comp_as__do([A| _], NRD) :-
+	comp_a_(A, NRD), !.
+comp_as__do([_| As], NRD) :-
+	comp_as__do(As, NRD).
 
-comp_a_(A, N0, S0, D) :-
-	X is powm(A, D, N0 + 1),
+comp_a_(A, (N, N0, R0, D)) :-
+	X is powm(A, D, N),
 	X =\= 1, X =\= N0,
 	forall(
-		between(1, S0, R),
-		(	D2 is 1 << R,
-			X2 is powm(X, D2, N0 + 1),
+		between(1, R0, S),
+		(	E is 1 << S,
+			X2 is powm(X, E, N),
 			X2 =\= N0
 		)
 	).
 
-calc_n0sd_(N, N0, S0, D) :-
+calc_nrd_(N, N0, R0, D) :-
 	N0 is N - 1,
-	calc_n0sd___do(N0, 0, S, D),
-	S0 is S - 1.
+	calc_rd___do(N0, 0, R, D),
+	R0 is R - 1.
 
-calc_n0sd___do(N0, A0, S, D) :-
+calc_rd___do(N0, R0, R, D) :-
 	N0 /\ 1 =:= 0, !,
 	N1 is N0 >> 1,
-	A1 is A0 + 1,
-	calc_n0sd___do(N1, A1, S, D).
-calc_n0sd___do(D, S, S, D).
+	R1 is R0 + 1,
+	calc_rd___do(N1, R1, R, D).
+calc_rd___do(D, R, R, D).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %!	det_max_(-Max:posint) is det.
 %
 %	Max is the maximum number for which the test is deterministic.
+%
+%	Max is fixed and equal to =3317044064679887385961980=.
+%
+%	*NOTE*: This predicate can be safely called concurrently.
 
 det_max_(3317044064679887385961980).
 
-%!	prb_mul_(-Mul:posint) is det.
+%!	prb_rep_(-Rep:posint) is det.
 %
-%	Mul is the number of iterations for the probabilistic test.
+%	Rep is the number of iterations for the probabilistic test.
+%
+%	Rep is fixed and equal to =20=.
+%
+%	*NOTE*: This predicate can be safely called concurrently.
 
-prb_mul_(20).						% TODO: Review this. ####
+prb_rep_(20).							% TODO: Review this. ####
 
-%	prb_as_(+N:posint, -As:list(prime)) is semidet.
+%	prb_as_(+N:posint, -As:list(prime)) is det.
 
 prb_as_(N, As) :-
+	assertion(N > 3),
+	prb_rep_(Rep),
 	N2 is N - 2,
 	findall(A,
-	(	between(1, 20/*mul*/, _),
-		random(2, N2, A)
+	(	between(1, Rep, _),
+		random_between(2, N2, A)
 	), As).
 
 %	det_as_(+N:posint, -As:list(prime)) is semidet.
 
 det_as_(N, As) :-
-	det_sas_(Max, As), N < Max, !.
+	det_sas_(Sup, As), N < Sup, !.
 
 det_sas_(2047, [2]).
 det_sas_(1373653, [2, 3]).
@@ -147,6 +165,6 @@ det_sas_(3474749660383, [2, 3, 5, 7, 11, 13]).
 det_sas_(341550071728321, [2, 3, 5, 7, 11, 13, 17]).
 det_sas_(3825123056546413051, [2, 3, 5, 7, 11, 13, 17, 19, 23]).
 det_sas_(318665857834031151167461, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]).
-det_sas_(3317044064679887385961981, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]).
+det_sas_(3317044064679887385961981, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]).	% 25 digits
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

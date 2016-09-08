@@ -24,116 +24,76 @@
 
 % (SWI-Prolog 7.3.25)
 
-% TODO: Improve leveraging of library(pio)?
+% TODO: Improve (leveraging of) library(pio)?
 
 :- module(prime_pio, []).
 
 :- public
-	open_/3,		% +File:file, +Mode:oneof(read,write), :Goal:callable
+	open_/3,		% +File:file, +Mode:oneof(read,write), :GStream:callable
 	read_/2,		% +Stream:stream, :GAdd:callable
 	write_/2.		% +Stream:stream, :GGen:callable
 
-/** <module> A simple prime number library :: pure I/O
+/** <module> A simple prime number library :: Pure I/O
 
-Module =prime_pio= provides low-level predicates to read/write from/to a
-file or stream all consecutive prime numbers starting from =2= and up to a
-certain limit that is determined by the caller.
+*|Nan.Numerics.Prime (nan_numerics_prime.pl)|*
 
-The accepted file format is a comma-separated list of the consecutive
-prime numbers starting from =2= and terminated by a period.
+Module =prime_pio= (nan_numerics_prime_pio.pl)
+provides low-level predicates to read/write comma-separated lists of
+positive integer numbers from/to a file or stream.
 
-*NOTE*: Predicates in this module are not meant for public use.
+Predicates in this module are _not_ synchronized.
+
+*NOTE*: Predicates in this module are _unsafe_, i.e. do not validate input
+arguments and are not steadfast.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
+:- use_module(library(apply)).
 :- use_module(library(dcg/basics)).
 :- use_module(library(pio)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-file__opts(read,
-	[	lock(read),
-		eof_action(error)
-	|	BaseOpts
-	]) :-
-	file__opts(BaseOpts).
-file__opts(write,
-	[	lock(write),
-		buffer(full)
-	|	BaseOpts
-	]) :-
-	file__opts(BaseOpts).
-
-stream__opts(read,
-	[	eof_action(error)
-	|	BaseOpts
-	]) :-
-	stream__opts(BaseOpts).
-stream__opts(write,
-	[	buffer(full),
-		representation_errors(error)
-	|	BaseOpts
-	]) :-
-	stream__opts(BaseOpts).
-
-file__opts(
-	[	bom(false),
-		encoding(ascii),
-		type(text)
-	]).
-
-stream__opts(
-	[	encoding(ascii),
-		type(text),
-		record_position(true),	% NOTE: Must be true for pio:stream_to_lazy_list/2.
-		buffer_size(1024)		% TODO: Review this. #####
-	]).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%!	open_(+File:file, +Mode:oneof(read,write), :Goal:callable) is det.
+%!	open_(+File:file, +Mode:oneof(read,write), :GStream:callable) is det.
 %
-%	Opens File in Mode and calls back =|Goal(Stream)|= where _Stream_ is
+%	Opens File in Mode and calls back =|GStream(Stream)|= where _Stream_ is
 %	the opened I/O stream.  Mode can be one of =read= or =write=.  File is
-%	automatically closed after Goal is finished.
+%	automatically closed after GStream is finished.
 %
 %	Encoding of file is =ascii=, type is =text=, buffering is =full=.
+%
+%	Calls to this predicate are _not_ synchronized.
 %
 %	@error	Errors from system:open/4.
 
 :- meta_predicate
 	open_(+, +, 1).
 
-open_(File, Mode, Goal) :-
+open_(File, Mode, GStream) :-
 	file__opts(Mode, Opts),
 	setup_call_cleanup(
 		open(File, Mode, Stream, [wait(false)| Opts]),
-		call(Goal, Stream),
+		call(GStream, Stream),
 		close(Stream, [force(false)])
 	).
 
 %!	read_(+Stream:stream, :GAdd:callable) is det.
 %
-%	Reads consecutive prime numbers from Stream.  The file must not be
-%	empty and numbers must start at =2=.  For every read number greater
-%	than =2= calls =|GAdd(+P0:prime +P:prime)|=, where _P0_ is the
-%	previously read number and _P_ is the current number.  Stops reading
-%	either at end-of-stream or when the call to GAdd fails.
+%	Reads a comma-separated list of positive integer numbers from Stream.
+%	Except for the first read number, for every number _N_ that is read
+%	calls =|GAdd(+N0:posint, +N:posint)|= where _N0_ is the previously read
+%	number.  Terminates either at end-of-stream or when GAdd terminates.
 %
 %	Encoding of stream is =ascii=, type is =text=, buffer size is =1024=.
 %
-%	*NOTE*: Does not check that the numbers read from the stream are
-%	consecutive prime numbers starting from =2=.
+%	Calls to this predicate are _not_ synchronized.
 %
-%	@error	syntax_error(invalid_format)	Input format is invalid.
-%	@error	syntax_error(invalid_start)		Input values must start at =2=.
-%	@error	syntax_error(invalid_value)		Input values must be =posint=.
+%	@error	syntax_error(invalid_format)	Format is invalid.
 %	@error	Errors from system:read/2.
-%	@tbd	Improve parse errors?
 
 :- meta_predicate
 	read_(+, 2).
@@ -141,47 +101,56 @@ open_(File, Mode, Goal) :-
 read_(Stream, GAdd) :-
 	set_stream_(Stream, read),
 	stream_to_lazy_list(Stream, List),
-	phrase(parse_(GAdd), List, _).
+	phrase(parse_(GAdd), List, _).	% NOTE: phrase/3!
 
 :- meta_predicate
 	parse_(2, +, -),
-	parse__p(2, +, +, -),
-	parse__add(2, +, +, +, -),
-	parse__sel(2, +, +, -).
+	parse__do(2, +, +, -),
+	parse__do__n(2, +, +, -),
+	parse__do__s(2, +, +, +, -),
+	parse__sel(2, +, +, +, -),
+	parse__end(2, +, +, +, -).
 
-parse_(GAdd) --> "2", !,
-	parse__sel(GAdd, 2).
-parse_(_) -->
-	syntax_error(invalid_start).
+parse_(GAdd) --> parse__n(N0), !, parse__do(GAdd, N0).
+parse_(_) --> parse__e, !.
+parse_(_) --> syntax_error(invalid_format).
 
-parse__p(GAdd, P0) --> integer(P), { P > 0 }, !,
-	parse__add(GAdd, P0, P).
-parse__p(_, _) -->
-	syntax_error(invalid_value).
+parse__do(GAdd, N0) --> parse__c, !, parse__do__n(GAdd, N0).
+parse__do(_, _) --> parse__e, !.
+parse__do(_, _) --> syntax_error(invalid_format).
 
-parse__add(GAdd, P0, P) -->
-	{ call(GAdd, P0, P) }, !,
-	parse__sel(GAdd, P).
-parse__add(_, _, _) --> [].
+parse__do__n(GAdd, N0) --> parse__n(N), !, parse__do__s(GAdd, N0, N).
+parse__do__n(_, _) --> syntax_error(invalid_format).
 
-parse__sel(GAdd, P0) --> ",", !,
-	parse__p(GAdd, P0).
-parse__sel(_, _) --> ".", eos, !.
-parse__sel(_, _) -->
-	syntax_error(invalid_format).
+parse__do__s(GAdd, N0, N) --> parse__c, !, parse__sel(GAdd, N0, N).
+parse__do__s(GAdd, N0, N) --> parse__e, !, parse__end(GAdd, N0, N).
+parse__do__s(_, _, _) --> syntax_error(invalid_format).
+
+parse__sel(GAdd, N0, N) --> { call(GAdd, N0, N) }, !, parse__do__n(GAdd, N).
+parse__sel(_, _, _) --> [].
+
+parse__end(GAdd, N0, N) --> { call(GAdd, N0, N) }, !.
+parse__end(_, _, _) --> [].
+
+parse__n(N) --> blanks, integer(N), { N > 0 }.
+
+parse__c --> blanks, ",".
+
+parse__e --> blanks, eos.
 
 %!	write_(+Stream:stream, :GGen:callable) is det.
 %
-%	Writes consecutive prime numbers to Stream.  Always writes the number
-%	=2=, then writes all numbers generated by calling =|GGen(-P:prime)|=,
-%	where _P_ shall be greater than =2=.  Stops writing when bactracking on
-%	GGen terminates.
+%	Writes a comma-separated list of positive integer numbers to Stream.
+%	Calls =|GGen(-N:posint)|= to generate the numbers=.  Terminates when
+%	GGen terminates.  The file may be empty.
 %
-%	Encoding of stream is =ascii=, type is =text=, buffering is =full=,
+%	Encoding of Stream is =ascii=, type is =text=, buffering is =full=,
 %	buffer size is =1024=.
 %
-%	*NOTE*: Does not check that the numbers generated by GGen are
-%	consecutive prime numbers starting from =3=.
+%	Calls to this predicate are _not_ synchronized.
+%
+%	*NOTE*: Does not check that the numbers generated by GGen are positive
+%	integer numbers.
 %
 %	@error	Errors from system:write/2.
 
@@ -190,22 +159,65 @@ parse__sel(_, _) -->
 
 write_(Stream, GGen) :-
 	set_stream_(Stream, write),
-	write(Stream, 2),
+	IsFirst = isFirst(true),
 	ignore(forall(
 		call(GGen, P),
-		(	write(Stream, ','),
+		(	arg(1, IsFirst, true)
+		->	write(Stream, P),
+			nb_setarg(1, IsFirst, false)
+		;	write(Stream, ','),
 			write(Stream, P)
 		)
-	)),
-	write(Stream, '.').
+	)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%	set_stream_(+Stream:stream, +Mode:oneof(read,write)) is det.
 
 set_stream_(Stream, Mode) :-
 	stream__opts(Mode, Opts),
-	set_stream__do(Stream, Opts).
+	maplist(set_stream(Stream), Opts).
 
-set_stream__do(_, []) :- !.
-set_stream__do(Stream, [Opt| Opts]) :-
-	set_stream(Stream, Opt),
-	set_stream__do(Stream, Opts).
+%	file__opts(+Mode:oneof(read,write), -Opts:list) is det.
+
+file__opts(read,
+[	lock(read),
+	eof_action(error)
+|	BaseOpts
+]) :-
+	file__opts(BaseOpts).
+file__opts(write,
+[	lock(write),
+	buffer(full)
+|	BaseOpts
+]) :-
+	file__opts(BaseOpts).
+
+file__opts(
+[	bom(false),
+	encoding(ascii),
+	type(text)
+]).
+
+%	stream__opts(+Mode:oneof(read,write), -Opts:list) is det.
+
+stream__opts(read,
+[	eof_action(error)
+|	BaseOpts
+]) :-
+	stream__opts(BaseOpts).
+stream__opts(write,
+[	buffer(full),
+	representation_errors(error)
+|	BaseOpts
+]) :-
+	stream__opts(BaseOpts).
+
+stream__opts(
+[	encoding(ascii),
+	type(text),
+	record_position(true),	% NOTE: Must be true for pio:stream_to_lazy_list/2.
+	buffer_size(1024)		% TODO: Review this. #####
+]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

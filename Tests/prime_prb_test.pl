@@ -24,18 +24,31 @@
 
 % (SWI-Prolog 7.3.25)
 
-/*	A simple prime number library :: probabilistic
+:- module(prime_prb_test, []).
+
+/** <module> A simple prime number library :: Probabilistic tests
+
+Tests for module =prime_prb=.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
 :- use_module(library(plunit)).
+:- use_module(library(lists)).
 
-:- ensure_loaded(module_inc).
-:- module_inc('nan_numerics_prime_prb.pl').
+:- use_module(loader).
+:- loader:load_module('nan_numerics_prime_prb.pl').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Woodall primes: http://www.prothsearch.net/woodall.html
+
+t__ws([2, 3, 6, 30, 75, 81, 115, 123, 249, 362, 384, 462, 512, 751, 822]).
+
+t__w(W, N) :- N is W * (1 << W) - 1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -61,28 +74,38 @@ test(test__4,
 ]) :-
 	prime_prb:test_(4, _).
 
-% Woodall primes := { i*2^i-1 | i in {2,3,6,30,75,81,...} }
-% http://www.prothsearch.net/woodall.html
-t__woodall(I, N) :- N is I * (1 << I) - 1.
-
 test(test__w_75,
 [	true(Cert == true)
 ]) :-
-	t__woodall(75, N),
+	t__w(75, N),
 	prime_prb:test_(N, Cert).
+
+test(test__w_75p2,
+[	fail
+]) :-
+	t__w(75, N),
+	N2 is N + 2,
+	prime_prb:test_(N2, _).
 
 test(test__w_81,
 [	true(Cert == false)
 ]) :-
-	t__woodall(81, N),
+	t__w(81, N),
 	prime_prb:test_(N, Cert).
 
-test(test__w_81_2,
+test(test__w_81p2,
 [	fail
 ]) :-
-	t__woodall(81, N),
+	t__w(81, N),
 	N2 is N + 2,
 	prime_prb:test_(N2, _).
+
+test(test__w_all,
+[	forall((t__ws(Ws), member(W, Ws))),
+	true
+]) :-
+	t__w(W, N),
+	prime_prb:test_(N, _).
 
 :- end_tests('prime_prb:test_').
 

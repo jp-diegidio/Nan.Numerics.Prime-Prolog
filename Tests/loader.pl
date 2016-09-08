@@ -24,21 +24,47 @@
 
 % (SWI-Prolog 7.3.25)
 
-/*	A simple prime number library :: module_inc
+:- module(loader, []).
+
+:- public
+	load_module/1,		% +File:atom
+	load_module/2.		% +Dir:atom, +File:atom
+
+/** <module> Code loader
+
+Predicates for loading code files.  (Meant to facilitate integration with
+SWI-Prolog pack system.)
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
-module_inc(File) :-
-	module_inc_('../Code/', File), !.
-module_inc(File) :-
-	module_inc_('../prolog/', File).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-module_inc_(Dir, File) :-
-	atomic_concat(Dir, File, Path),
+dir_('../Code/').
+dir_('../prolog/').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%!	load_module(+File:atom) is semidet.
+%
+%	Repeats calling =|load_module/2|= with _Dir_ successively set to
+%	=|'../Code/'|= and =|'../prolog/'|=,
+%	until the call succeeds.  Fails if File does not exist in any _Dir_.
+
+load_module(File) :-
+	dir_(Dir),
+	load_module(Dir, File), !.
+
+%!	load_module(+Dir:atom, +File:atom) is semidet.
+%
+%	Concatenates Dir and File then calls system:use_module/1 with the
+%	resulting path.  Fails if File does not exist in Dir.
+
+load_module(Dir, File) :-
+	atom_concat(Dir, File, Path),
 	exists_file(Path),
 	use_module(Path).
 

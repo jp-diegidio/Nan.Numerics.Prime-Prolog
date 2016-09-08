@@ -24,17 +24,30 @@
 
 % (SWI-Prolog 7.3.25)
 
-/*	A simple prime number library :: debug
+:- module(debug, []).
+
+/** <module> Code documentation
+
+Starts the documentation server on port =8001= with editing disabled.
+
+Use doc_browser/0 to open the default browser.
 
 @author		Julio P. Di Egidio
-@version	1.2.5-beta
+@version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
 :- use_module(library(doc_http)).
 
-:- doc_server(4000, [edit(false)]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+port_(8001).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- port_(Port), doc_server(Port, [edit(false)]).
+
 :- portray_text(true).
 
 :- consult(test_all).
