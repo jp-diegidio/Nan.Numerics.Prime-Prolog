@@ -1,71 +1,98 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-/*	Nan.Numerics.Prime
-	A simple prime number library
-	Copyright 2016 Julio P. Di Egidio
+
+/*	Nan.Numerics.Primes
+	Nan.Numerics.Primes/Prolog 1.3.0-beta
+	A Simple Prime Number Library in Prolog
+	Copyright 2016-2017 Julio P. Di Egidio
 	<mailto:julio@diegidio.name>
-	<http://julio.diegidio.name/Projects/Nan.Numerics.Prime/>
+	<http://julio.diegidio.name/Projects/Nan.Numerics.Primes/>
 	
-	This file is part of Nan.Numerics.Prime.
+	This file is part of Nan.Numerics.Primes.
 	
-	Nan.Numerics.Prime is free software: you can redistribute it and/or modify
+	Nan.Numerics.Primes is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 	
-	Nan.Numerics.Prime is distributed in the hope that it will be useful,
+	Nan.Numerics.Primes is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 	
 	You should have received a copy of the GNU General Public License
-	along with Nan.Numerics.Prime.  If not, see <http://www.gnu.org/licenses/>.
+	along with Nan.Numerics.Primes.  If not, see <http://www.gnu.org/licenses/>.
 */
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % (SWI-Prolog 7.3.25)
 
-:- module(loader, []).
+:- module(loader,
+	[	module_sdir/1,  % -SDir
+		module_path/2,  % +File, -Path
+		module_path/3   % +Dir, +File, -Path
+	]).
 
-:- public
-	load_module/1,		% +File:atom
-	load_module/2.		% +Dir:atom, +File:atom
+/** <module> A simple prime number library :: Module loader
 
-/** <module> Code loader
+Part of *|Nan.Numerics.Primes|* (nan/numerics/primes.pl)
 
-Predicates for loading code files.  (Meant to facilitate integration with
-SWI-Prolog pack system.)
+Predicates for locating module code files.
+
+(Integrated with SWI-Prolog's pack system.)
 
 @author		Julio P. Di Egidio
 @version	1.3.0-beta
-@copyright	2016 Julio P. Di Egidio
+@copyright	2016-2017 Julio P. Di Egidio
 @license	GNU GPLv3
 */
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dir_('../Code/').
-dir_('../prolog/').
+%!	module_sdir(-SDir:atom) is nondet.
+%
+%	Enumerates the search directories.
+
+module_sdir('../Code/').
+module_sdir('../prolog/nan/system/').
+
+%!	module_path(+File:atom, -Path:atom) is det.
+%
+%	Returns the full Path for File in any of the search directories.
+%	
+%	It is equivalent to:
+%	==
+%	module_path(File, Path) :-
+%		module_sdir(Dir),
+%		module_path(Dir, File, Path), !.
+%	==
+%	
+%	Throws if file File does not exist in any _Dir_:
+%	the error term is =|loader_error(file_not_found(any, File), _)|=.
+
+module_path(File, Path) :-
+	module_sdir(Dir),
+	module_path__do(Dir, File, Path), !.
+module_path(File, _) :-
+	module_path__throw(any, File).
+
+%!	module_path(+Dir:atom, +File:atom, -Path:atom) is det.
+%
+%	Concatenates Dir and File into file Path.
+%	
+%	Throws if File does not exist in Dir:
+%	the error term is =|loader_error(file_not_found(Dir, File), _)|=.
+
+module_path(Dir, File, Path) :-
+	module_path__do(Dir, File, Path), !.
+module_path(Dir, File, _) :-
+	module_path__throw(Dir, File).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%!	load_module(+File:atom) is semidet.
-%
-%	Repeats calling =|load_module/2|= with _Dir_ successively set to
-%	=|'../Code/'|= and =|'../prolog/'|=,
-%	until the call succeeds.  Fails if File does not exist in any _Dir_.
-
-load_module(File) :-
-	dir_(Dir),
-	load_module(Dir, File), !.
-
-%!	load_module(+Dir:atom, +File:atom) is semidet.
-%
-%	Concatenates Dir and File then calls system:use_module/1 with the
-%	resulting path.  Fails if File does not exist in Dir.
-
-load_module(Dir, File) :-
+module_path__do(Dir, File, Path) :-
 	atom_concat(Dir, File, Path),
-	exists_file(Path),
-	use_module(Path).
+	exists_file(Path).
+
+module_path__throw(Dir, File) :-
+	throw(loader_error(file_not_found(Dir, File), _)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

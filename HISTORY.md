@@ -1,22 +1,21 @@
-Nan.Numerics.Prime/Prolog 1.3.0-beta
-Nan.Numerics.Prime
-A simple prime number library
-Copyright 2016 Julio P. Di Egidio
-Licensed under GNU GPLv3.
-http://julio.diegidio.name/Projects/Nan.Numerics.Prime/
-https://github.com/jp-diegidio/Nan.Numerics.Prime-Prolog/
+# A Simple Prime Number Library in Prolog
 
-Version 1.3.0-beta:
+Nan.Numerics.Primes
+Nan.Numerics.Primes/Prolog 1.3.0-beta
+A Simple Prime Number Library in Prolog
+Copyright 2016-2017 Julio P. Di Egidio
+Licensed under GNU GPLv3.
+http://julio.diegidio.name/Projects/Nan.Numerics.Primes/
+https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/
+
+Version #DEV#:
 -------------------
-- Implemented dynamic memoization.
-- Implemented dynamic wheel.
 - Fixed synchronization and visibility.
 - Upgraded infos to MD format.
-- BREAKING: Removed prime_gen/2 and prime_gen_rev/2.
-- BREAKING: prime_whl_init/1 supersedes ... # TODO: #####.
-- BREAKING: prime_mem_fill/2 supersedes ... # TODO: #####.
-- BREAKING: No more dot at end of file ... # TODO: #####.
-- BREAKING: prime_fact/2 becomes semidet ... # TODO: #####.
+- Completely restructured.
+- Dropped memoization.
+- Dropped pure i/o.
+- BREAKING: #####
 
 Version 1.2.5-beta:
 -------------------

@@ -1,12 +1,14 @@
-Nan.Numerics.Prime/Prolog 1.3.0-beta
-Nan.Numerics.Prime
-A simple prime number library
-Copyright 2016 Julio P. Di Egidio
-Licensed under GNU GPLv3.
-http://julio.diegidio.name/Projects/Nan.Numerics.Prime/
-https://github.com/jp-diegidio/Nan.Numerics.Prime-Prolog/
+# A Simple Prime Number Library in Prolog
 
-=|library(nan_numerics_prime)|=
+Nan.Numerics.Primes
+Nan.Numerics.Primes/Prolog 1.3.0-beta
+A Simple Prime Number Library in Prolog
+Copyright 2016-2017 Julio P. Di Egidio
+Licensed under GNU GPLv3.
+http://julio.diegidio.name/Projects/Nan.Numerics.Primes/
+https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/
+
+=|library(nan_numerics_primes)|=
 
 Module =prime= provides predicates to test (positive integer) numbers for
 primality, find divisors and factor numbers, generate prime numbers in some
@@ -34,10 +36,10 @@ SWI-Prolog 7.3.25 - http://www.swi-prolog.org/
 Usage example:
 
     ==
-    ?- pack_install(nan_numerics_prime).
+    ?- pack_install(nan_numerics_primes).
     true.
     
-    ?- use_module(library(nan_numerics_prime)).
+    ?- use_module(library(nan_numerics_primes)).
     true.
 
     ?- time(prime_right(1234567891012345678901234567890123456789011111, P)).
@@ -46,8 +48,8 @@ Usage example:
     ==
 
 To be done: Implement parallel factoring functions.
-To be done: Implement prime counting/n-th prime functions.
 To be done: Implement probabilitic test error estimates?
 To be done: Implement option for num. of probabilistic iterations?
+To be done: Implement prime counting/n-th prime functions.
 To be done: Implement deterministic tests?
 To be done: Improve compatibility with other Prolog systems.
