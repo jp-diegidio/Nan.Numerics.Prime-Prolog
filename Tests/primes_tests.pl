@@ -418,28 +418,28 @@ test(prime_fact__t,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- begin_tests(primes_extra).
+:- begin_tests(primes_state).
+
+test(prime_prb_acc__t,
+[	true(Acc == 80)
+]) :-
+	prime_prb_acc(Acc).
 
 test(prime_prb_det_max__t,
 [	true(Max == 3317044064679887385961980)
 ]) :-
 	prime_prb_det_max(Max).
 
-test(prime_prb_rep_def__t,
-[	true(Rep == 20)
-]) :-
-	prime_prb_rep_def(Rep).
-
-test(prime_whl_level__t,
+test(prime_whl_lev__t,
 [	true(Lev == 5)
 ]) :-
-	prime_whl_level(Lev).
+	prime_whl_lev(Lev).
 
 test(prime_whl_det_max__t,
 [	true(Max == 168)
 ]) :-
 	prime_whl_det_max(Max).
 
-:- end_tests(primes_extra).
+:- end_tests(primes_state).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

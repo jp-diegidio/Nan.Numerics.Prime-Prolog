@@ -73,7 +73,6 @@ arguments and are not steadfast.
 @version	1.3.0-beta
 @copyright	2016 Julio P. Di Egidio
 @license	GNU GPLv3
-@tbd		Integrate =isqrt= function from GMP?
 */
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -349,7 +348,7 @@ prime_lgc_div_rev_p(N, H, P) :-
 %	Fs is a list of all prime factors of N and corresponding exponents
 %	in _ascending_ order of the factors.
 %	
-%	Elements of Fs are of the form =|s(P:prime^Exp:posint)|=.
+%	Elements of Fs are terms of the form =|s(P:prime^Exp:posint)|=.
 %	
 %	If N is equal to =1= or N is a prime number, Fs is =|[N^1]|=.
 

@@ -26,7 +26,7 @@
 % (SWI-Prolog 7.3.25)
 
 :- module(primes_wheel_tests,
-	[	expected_level/1   % -Lev
+	[	expected_lev/1   % -Lev
 	]).
 
 :- multifile
@@ -39,7 +39,7 @@ Part of *|Nan.Numerics.Primes|* (nan/numerics/primes.pl)
 Tests for module =primes_wheel= (nan/numerics/primes_wheel.pl).
 
 *NOTE*: Running tests in this module will throw an error if the wheel is
-not at the level returned by expected_level/1.  The error term is of the
+not at the level returned by expected_lev/1.  The error term is of the
 form =|error(primes_wheel_tests:level(Expected, Actual), _)|=.
 
 @author		Julio P. Di Egidio
@@ -57,25 +57,26 @@ form =|error(primes_wheel_tests:level(Expected, Actual), _)|=.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%!	expected_level(-Lev:nonneg) is det.
+%!	expected_lev(-Lev:nonneg) is det.
 %
-%	Lev is the wheel level required for testing.  This is fixed at =4=.
+%	Lev is the wheel level that is expected for testing.
 
-expected_level(5).
+expected_lev(5).
 
-t__cert(N, true) :- N < 169, !.
+t__cert(N, true) :-
+	N < 169, !.
 t__cert(_, false).
 
 t__assert_lev :-
-	expected_level(TLev),
-	prime_whl_level(Lev),
+	expected_lev(TLev),
+	prime_whl_lev(Lev),
 	t__assert_lev__sel(TLev, Lev).
 
 t__assert_lev__sel(TLev, TLev) :- !.
 t__assert_lev__sel(TLev, Lev) :-
-	throw(error(primes_wheel_tests:level(TLev, Lev), _)).
+	throw(error(primes_wheel_tests:expected_lev(TLev, Lev), _)).
 
-prolog:message(error(primes_wheel_tests:level(TLev, Lev), _)) -->
+prolog:message(error(primes_wheel_tests:expected_lev(TLev, Lev), _)) -->
 	[ 'Wheel level must be ~d, was ~d.'-[TLev, Lev] ].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

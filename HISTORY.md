@@ -10,6 +10,7 @@ https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/
 
 Version #DEV#:
 -------------------
+- Implemented probabilistic accuracy.
 - Fixed synchronization and visibility.
 - Upgraded infos to MD format.
 - Completely restructured.

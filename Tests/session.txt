@@ -1,3 +1,7 @@
+
+% All 499 tests passed
+% 290,722 inferences, 0.655 CPU in 0.810 seconds (81% CPU, 443712 Lips)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ?- pack_install('<path>/nan_numerics_primes-1.3.0.zip').

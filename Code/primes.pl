@@ -47,19 +47,19 @@
 		prime_div_rev/2,      % +N, ?P
 		prime_div_rev/3,      % +N, +Sup, ?P
 		prime_fact/2,         % +N, ?Fs
+		prime_prb_acc/1,      % ?Acc
 		prime_prb_det_max/1,  % ?Max
-		prime_prb_rep_def/1,  % ?Mul
-		prime_whl_level/1,    % ?Lev
+		prime_whl_lev/1,      % ?Lev
 		prime_whl_det_max/1   % ?Max
 	]).
 
 :- use_module(primes_wheel,
-	[	prime_whl_level/1   as prime_whl_level__,
+	[	prime_whl_lev/1   as prime_whl_lev__,
 		prime_whl_det_max/1 as prime_whl_det_max__
 	]).
 :- use_module(primes_probabilistic,
 	[	prime_prb_det_max/1 as prime_prb_det_max__,
-		prime_prb_rep_def/1 as prime_prb_rep_def__
+		prime_prb_acc/1 as prime_prb_acc__
 	]).
 :- use_module(primes_logic).
 
@@ -324,7 +324,7 @@ prime_div_rev(N, Sup, P) :-
 %	Fs is a list of all prime factors of N and corresponding exponents
 %	in _ascending_ order of the factors.
 %	
-%	Elements of Fs are of the form =|s(P:prime^Exp:posint)|=.
+%	Elements of Fs are terms of the form =|s(P:prime^Exp:posint)|=.
 %	
 %	If N is equal to =1= or N is a prime number, Fs is =|[N^1]|=.
 %	
@@ -336,30 +336,28 @@ prime_fact(N, Fs) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%!	prime_prb_acc(?Acc:nonneg) is det.
+%
+%	Acc is the minimum accuracy of the test.
+%	
+%	Equivalently, =|2^(-Acc)|= is the maximum probability of error.
+
+prime_prb_acc(Acc) :-
+	prime_prb_acc__(Acc_), Acc = Acc_.
+
 %!	prime_prb_det_max(?Max:posint) is det.
 %
 %	Max is the maximum number for which the test is deterministic.
-%
-%	This value is fixed and equal to =3317044064679887385961980=.
 
 prime_prb_det_max(Max) :-
 	prime_prb_det_max__(Max_), Max = Max_.
 
-%!	prime_prb_rep_def(?Rep:posint) is det.
+%!	prime_whl_lev(?Lev:nonneg) is det.
 %
-%	Rep is the default number of iterations for the probabilistic test.
-%
-%	This value is fixed and equal to =20=.
+%	Lev is the level of the wheel.
 
-prime_prb_rep_def(Rep) :-
-	prime_prb_rep_def__(Rep_), Rep = Rep_.
-
-%!	prime_whl_level(?Lev:nonneg) is det.
-%
-%	Lev is the current level of the wheel.
-
-prime_whl_level(Lev) :-
-	prime_whl_level__(Lev_), Lev = Lev_.
+prime_whl_lev(Lev) :-
+	prime_whl_lev__(Lev_), Lev = Lev_.
 
 %!	prime_whl_det_max(?Max:posint) is det.
 %
