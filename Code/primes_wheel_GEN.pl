@@ -138,7 +138,7 @@ prime_whl_write__foot(Stream) :-
 %	w__det_max(-Max:posint) is det.
 %	w__a_is(+N:posint) is semidet.
 %	w__p_I0(+N:posint, -I0:nonneg) is det.
-%	w__cert(+N:posint, -Cert:pcertean) is det.
+%	w__cert(+N:posint, -Cert:bool) is det.
 
 :- dynamic
 	w__det_max/1,
@@ -151,8 +151,7 @@ prime_whl_write__foot(Stream) :-
 w__sub :-
 	w__p0(P0),
 	w__pL(PL),
-	P00 is P0 * P0,
-	Max is P00 - 1,
+	Max is P0 * P0 - 1,
 	retractall(w__det_max(_)),
 	retractall(w__a_is(_)),
 	retractall(w__p_I0(_, _)),
@@ -160,7 +159,7 @@ w__sub :-
 	assertz(w__det_max(Max)),
 	assertz((w__a_is(N) :- N < P0)),
 	assertz((w__p_I0(N, I0) :- I0 is (N - P0) mod PL)),
-	assertz((w__cert(N, true) :- N < P00, !)),
+	assertz((w__cert(N, true) :- N =< Max, !)),
 	assertz(w__cert(_, false)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

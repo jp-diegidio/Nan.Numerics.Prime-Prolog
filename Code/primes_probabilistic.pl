@@ -57,20 +57,19 @@ Predicates in this module can be safely called concurrently.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%!	prime_prb_test(+N:posint, -Cert:pcert) is semidet.
+%!	prime_prb_test(+N:posint, -Cert:bool) is semidet.
 %
 %	True if N is a candidate prime number.
 %	
 %	The minimum accuracy of the test is defined by prime_prb_acc/1.
 %	
-%	Cert is a term of the form =|pcert(N, true)|= if N is certainly prime,
-%	otherwise it is a term of the form =|pcert(N, Acc)|=.
+%	Cert is =true= if N is certainly prime, otherwise it is =false=.
 
 prime_prb_test(1, _) :- !, fail.
-prime_prb_test(2, pcert(2, true)) :- !.
+prime_prb_test(2, true) :- !.
 prime_prb_test(N, Cert) :-
 	test__ws(N, Ws, Cert),
-	\+ comp__ws(N, Ws).
+	\+ comp_(N, Ws).
 
 %!	prime_prb_acc(-Acc:nonneg) is det.
 %
@@ -79,7 +78,7 @@ prime_prb_test(N, Cert) :-
 %	Equivalently, =|2^(-Acc)|= is the maximum probability of error.
 
 prime_prb_acc(Acc) :-
-	prb__acc(Acc).
+	test__acc(Acc).
 
 %!	prime_prb_det_max(-Max:posint) is det.
 %
@@ -90,17 +89,9 @@ prime_prb_det_max(Max) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%	test__ws(+N:posint, -Ws:list(posint), -Cert:pcert) is det.
+%	comp_(+N:posint +Ws:list(posint)) is semidet.
 
-test__ws(N, Ws, pcert(N, true)) :-
-	det__ws(N, Ws), !.
-test__ws(N, Ws, pcert(N, Acc)) :-
-	prb__ws(N, Ws),
-	prb__acc(Acc).
-
-%	comp__ws(+N:posint +Ws:list(posint)) is semidet.
-
-comp__ws(N, Ws) :-
+comp_(N, Ws) :-
 	comp__n0_r0_d(N, N0, R0, D),
 	comp__do(Ws, (N, N0, R0, D)).
 
@@ -131,45 +122,9 @@ comp__w(W, (N, N0, R0, D)) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%	test__acc(-Acc:nonneg) is det.
 %	det__max(-Max:posint) is det.
-
-det__max(3317044064679887385961980).	% < 82 bits
-% 3317044064679887385961980
-% 2417851639229258349412352
-
-%	det__ws(+N:posint, -Ws:list(posint)) is semidet.
-
-det__ws(N, Ws) :-
-	det__ws__tbl(Sup, Ws), N < Sup, !.
-
-%	det__ws__tbl(-Sup:posint, -Ws:list(posint)) is multi.
-
-det__ws__tbl(2047, [2]).
-det__ws__tbl(1373653, [2, 3]).
-det__ws__tbl(25326001, [2, 3, 5]).
-det__ws__tbl(3215031751, [2, 3, 5, 7]).
-det__ws__tbl(2152302898747, [2, 3, 5, 7, 11]).
-det__ws__tbl(3474749660383, [2, 3, 5, 7, 11, 13]).
-det__ws__tbl(341550071728321, [2, 3, 5, 7, 11, 13, 17]).
-det__ws__tbl(3825123056546413051, [2, 3, 5, 7, 11, 13, 17, 19, 23]).
-det__ws__tbl(318665857834031151167461, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]).
-det__ws__tbl(3317044064679887385961981, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]).
-
-%	prb__ws(+N:posint, -Ws:list(posint)) is det.
-%	prb__ws(+N:posint, +Acc:nonneg, -Ws:list(posint)) is det.
-
-prb__ws(N, Ws) :-
-	(prb__rs__tbl(Sup, Rep), N < Sup, !; Rep = 1),
-	M is N - 2,
-	findall(W,
-	(	between(1, Rep, _),
-		random_between(2, M, W)
-	), Ws).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%	prb__acc(-Acc:nonneg) is det.
-%	prb__rs__tbl(-Sup:posint, -Rep:posint) is multi.
+%	test__ws(+N:posint, -Ws:list(posint), -Cert:bool) is det.
 
 :- include(primes_probabilistic_inc).
 

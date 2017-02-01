@@ -1,6 +1,6 @@
 
 % All 499 tests passed
-% 290,722 inferences, 0.655 CPU in 0.810 seconds (81% CPU, 443712 Lips)
+% 284,108 inferences, 0.624 CPU in 0.850 seconds (73% CPU, 455298 Lips)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

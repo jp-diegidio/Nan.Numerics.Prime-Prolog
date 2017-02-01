@@ -275,7 +275,7 @@ gen_rev_p__sel(Inf, H, P) :-
 
 prime_lgc_div(N, P) :-
 	% Test in [2; sqrt(N)]
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	nth_integer_root_and_remainder(2, N, Sup, _),
 	prime_lgc_gen(2, Sup, P),
 	N mod P =:= 0, !.
@@ -288,7 +288,7 @@ prime_lgc_div(N, P) :-
 
 prime_lgc_div(N, Inf, P) :-
 	% Test in [Inf; N//2]
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	Sup is N >> 1,
 	prime_lgc_gen(Inf, Sup, P),
 	N mod P =:= 0, !.
@@ -301,7 +301,7 @@ prime_lgc_div(N, Inf, P) :-
 
 prime_lgc_div_p(N, L, P) :-
 	% Test in [L; N//2]
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	Sup is N >> 1,
 	prime_lgc_gen_p(L, Sup, P),
 	N mod P =:= 0, !.
@@ -312,7 +312,7 @@ prime_lgc_div_p(N, L, P) :-
 
 prime_lgc_div_rev(N, P) :-
 	% Test in [N//2; 2] (rev)
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	Sup is N >> 1,
 	prime_lgc_gen_rev(Sup, P),
 	N mod P =:= 0, !.
@@ -325,7 +325,7 @@ prime_lgc_div_rev(N, P) :-
 
 prime_lgc_div_rev(N, Sup, P) :-
 	% Test in [min(Sup, N//2); 2] (rev)
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	Sup1 is min(Sup, N >> 1),
 	prime_lgc_gen_rev(Sup1, P),
 	N mod P =:= 0, !.
@@ -338,7 +338,7 @@ prime_lgc_div_rev(N, Sup, P) :-
 
 prime_lgc_div_rev_p(N, H, P) :-
 	% Test in [min(H, N//2); 2] (rev)
-	\+ prime_lgc_test(N),		% TODO: Only good for deterministic! #####
+	\+ prime_lgc_test(N),		% TODO: Only good for deterministic!? #####
 	Sup1 is min(H, N >> 1),
 	prime_lgc_gen_rev(Sup1, P),
 	N mod P =:= 0, !.

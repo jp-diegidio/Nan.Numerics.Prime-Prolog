@@ -25,13 +25,6 @@
 
 % (SWI-Prolog 7.3.25)
 
-% TODO: Implement parallel factoring functions.
-% TODO: Implement probabilitic test error estimates?
-% TODO: Implement option for num. of probabilistic iterations?
-% TODO: Implement prime counting/n-th prime functions.
-% TODO: Implement deterministic tests?
-% TODO: Improve compatibility with other Prolog systems.
-
 :- module(primes,
 	[	prime_test/1,         % +N
 		prime_right/2,        % +N, ?P
@@ -58,8 +51,8 @@
 		prime_whl_det_max/1 as prime_whl_det_max__
 	]).
 :- use_module(primes_probabilistic,
-	[	prime_prb_det_max/1 as prime_prb_det_max__,
-		prime_prb_acc/1 as prime_prb_acc__
+	[	prime_prb_acc/1 as prime_prb_acc__,
+		prime_prb_det_max/1 as prime_prb_det_max__
 	]).
 :- use_module(primes_logic).
 
@@ -150,8 +143,6 @@ SWI-Prolog 7.3.25 - http://www.swi-prolog.org/
 @license	GNU GPLv3
 
 @tbd		Implement parallel factoring functions.
-@tbd		Implement probabilitic test error estimates?
-@tbd		Implement option for num. of probabilistic iterations?
 @tbd		Implement prime counting/n-th prime functions.
 @tbd		Implement deterministic tests?
 @tbd		Improve compatibility with other Prolog systems.

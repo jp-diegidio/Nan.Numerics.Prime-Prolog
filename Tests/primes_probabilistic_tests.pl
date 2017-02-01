@@ -64,10 +64,9 @@ form =|error(primes_probabilistic_tests:accuracy(Expected, Actual), _)|=.
 
 expected_acc(80).
 
-t__cert(N, pcert(N, true)) :-
+t__cert(N, true) :-
 	prime_prb_det_max(Max), N =< Max, !.
-t__cert(N, pcert(N, Acc)) :-
-	prime_prb_acc(Acc).
+t__cert(_, false).
 
 t__assert_acc :-
 	expected_acc(TAcc),

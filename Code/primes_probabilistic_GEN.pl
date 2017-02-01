@@ -70,11 +70,17 @@ prime_prb_write(File) :-
 		close(Stream)
 	).
 prime_prb_write(Stream) :-
-	prb__acc(Acc),
+	test__acc(Acc),
 	print_message(informational, primes_probabilistic:write_begin(Acc)),
 	prime_prb_write__head(Stream),
-	prime_prb_write__pred(Stream, prb__acc/1),
-	prime_prb_write__pred(Stream, prb__rs__tbl/2),
+	prime_prb_write__pred(Stream, test__acc/1),
+	prime_prb_write__pred(Stream, test__ws/3),
+	prime_prb_write__pred(Stream, det__max/1),
+	prime_prb_write__pred(Stream, det__ws/2),
+	prime_prb_write__pred(Stream, prb__r/2),
+	prime_prb_write__pred(Stream, prb__ws/3),
+	prime_prb_write__pred(Stream, det__ws__tbl/2),
+	prime_prb_write__pred(Stream, prb__r__tbl/2),
 	prime_prb_write__foot(Stream),
 	print_message(informational, primes_probabilistic:write_end).
 
@@ -122,33 +128,79 @@ prime_prb_write__foot(Stream) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%	prb__acc(-Acc:nonneg) is det.
-%	prb__rs__tbl(-Sup:posint, -Rep:posint) is multi.
+%	test__ws(+N:posint, -Ws:list(posint), -Cert:bool) is det.
+
+test__ws(N, Ws, true) :-
+	det__ws(N, Ws), !.
+test__ws(N, Ws, false) :-
+	prb__r(N, Rep),
+	prb__ws(N, Rep, Ws).
+
+%	det__max(-Max:posint) is det.
+
+det__max(3317044064679887385961980).	% < 82 bits
+
+%	det__ws(+N:posint, -Ws:list(posint)) is semidet.
+
+det__ws(N, Ws) :-
+	det__ws__tbl(Sup, Ws), N < Sup, !.
+
+%	det__ws__tbl(-Sup:posint, -Ws:list(posint)) is multi.
+
+det__ws__tbl(2047, [2]).
+det__ws__tbl(1373653, [2, 3]).
+det__ws__tbl(25326001, [2, 3, 5]).
+det__ws__tbl(3215031751, [2, 3, 5, 7]).
+det__ws__tbl(2152302898747, [2, 3, 5, 7, 11]).
+det__ws__tbl(3474749660383, [2, 3, 5, 7, 11, 13]).
+det__ws__tbl(341550071728321, [2, 3, 5, 7, 11, 13, 17]).
+det__ws__tbl(3825123056546413051, [2, 3, 5, 7, 11, 13, 17, 19, 23]).
+det__ws__tbl(318665857834031151167461, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]).
+det__ws__tbl(3317044064679887385961981, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]).
+
+%	prb__ws(+N:posint, -Ws:list(posint)) is det.
+
+prb__r(N, Rep) :-
+	(	prb__r__tbl(Sup, Rep), N < Sup, !
+	;	Rep = 1
+	).
+
+prb__ws(N, Rep, Ws) :-
+	M is N - 2,
+	findall(W,
+	(	between(1, Rep, _),
+		random_between(2, M, W)
+	), Ws).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%	test__acc(-Acc:nonneg) is det.
+%	prb__r__tbl(-Sup:posint, -Rep:posint) is multi.
 
 :- dynamic
-	prb__acc/1,
-	prb__rs__tbl/2.
+	test__acc/1,
+	prb__r__tbl/2.
 
 %	p__init(+Acc:nonneg) is det.
 
 p__init(Acc) :-
-	retractall(prb__acc(_)),
-	retractall(prb__rs__tbl(_, _)),
-	p__init__rs(Acc),
-	assertz(prb__acc(Acc)).
+	retractall(test__acc(_)),
+	retractall(prb__r__tbl(_, _)),
+	p__init__r(Acc),
+	assertz(test__acc(Acc)).
 
-p__init__rs(Acc) :-
+p__init__r(Acc) :-
 	p__T_to_K(1, Acc, K),
-	p__init__rs__do(2, Acc, K).
+	p__init__r__do(2, Acc, K).
 
-p__init__rs__do(_, _, K) :-
+p__init__r__do(_, _, K) :-
 	K =< 81, !.
-p__init__rs__do(Rep, Acc, K) :-
+p__init__r__do(Rep, Acc, K) :-
 	Sup is 1 << K,
-	asserta(prb__rs__tbl(Sup, Rep)),
+	asserta(prb__r__tbl(Sup, Rep)),
 	p__T_to_K(Rep, Acc, K1),
 	Rep1 is Rep + 1,
-	p__init__rs__do(Rep1, Acc, K1).
+	p__init__r__do(Rep1, Acc, K1).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

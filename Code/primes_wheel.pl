@@ -58,7 +58,7 @@ For code docs syntax and meaning see nan_help_docs.txt.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%!	prime_whl_test(+N:posint, -Cert:pcert) is semidet.
+%!	prime_whl_test(+N:posint, -Cert:bool) is semidet.
 %
 %	True if N is a candidate prime number.
 %	
@@ -72,7 +72,7 @@ prime_whl_test(N, Cert) :-
 	w__p(I0, 0, 0),
 	w__cert(N, Cert).
 
-%!	prime_whl_right(+N:posint, -P:posint, -Cert:pcert) is det.
+%!	prime_whl_right(+N:posint, -P:posint, -Cert:bool) is det.
 %
 %	P is the smallest candidate prime number greater than or equal to N.
 %	
@@ -87,7 +87,7 @@ prime_whl_right(N, P, Cert) :-
 	P is N + ROff,
 	w__cert(P, Cert).
 
-%!	prime_whl_left(+N:posint, -P:posint, -Cert:pcert) is semidet.
+%!	prime_whl_left(+N:posint, -P:posint, -Cert:bool) is semidet.
 %
 %	P is the greatest candidate prime number less than or equal to N.
 %	
@@ -124,7 +124,7 @@ prime_whl_det_max(Max) :-
 %	w__lev(-Lev:nonneg) is det.
 %	w__a_is(+N:posint) is semidet.
 %	w__p_I0(+N:posint, -I0:nonneg) is det.
-%	w__cert(+N:posint, -Cert:pcert) is det.
+%	w__cert(+N:posint, -Cert:bool) is det.
 %	w__a(-N:posint, -L:posint, -R:posint) is multi.
 %	w__p(-I0:nonneg, -LOff:posint, -ROff:posint) is multi.
 

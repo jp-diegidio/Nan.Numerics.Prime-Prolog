@@ -34,7 +34,7 @@ w__p_I0(B, A) :-
 	A is (B-13)mod 2310.
 
 w__cert(A, true) :-
-	A<169, !.
+	A=<168, !.
 w__cert(_, false).
 
 w__a(1, 1, 2).
