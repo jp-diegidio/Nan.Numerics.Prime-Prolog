@@ -48,8 +48,6 @@ Usage example:
     ==
 
 To be done: Implement parallel factoring functions.
-To be done: Implement probabilitic test error estimates?
-To be done: Implement option for num. of probabilistic iterations?
 To be done: Implement prime counting/n-th prime functions.
 To be done: Implement deterministic tests?
 To be done: Improve compatibility with other Prolog systems.

@@ -1,6 +1,12 @@
 
-% All 499 tests passed
-% 284,108 inferences, 0.624 CPU in 0.850 seconds (73% CPU, 455298 Lips)
+% All 501 tests passed
+% 3,064,360 inferences, 1.700 CPU in 1.820 seconds (93% CPU, 1802129 Lips)
+
+?- test_all(prime_fact).
+% PL-Unit: prime_fact ............... done
+% All 15 tests passed
+% 2,784,483 inferences, 1.014 CPU in 1.010 seconds (100% CPU, 2746021 Lips)
+true.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

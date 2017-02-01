@@ -13,10 +13,9 @@ Version #DEV#:
 - Implemented probabilistic accuracy.
 - Fixed synchronization and visibility.
 - Upgraded infos to MD format.
-- Completely restructured.
-- Dropped memoization.
-- Dropped pure i/o.
-- BREAKING: #####
+- BREAKING: Completely restructured.
+- BREAKING: Dropped memoization.
+- BREAKING: Dropped i/o.
 
 Version 1.2.5-beta:
 -------------------
