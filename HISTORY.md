@@ -8,10 +8,12 @@ Licensed under GNU GPLv3.
 http://julio.diegidio.name/Projects/Nan.Numerics.Primes/
 https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/
 
-Version #DEV#:
+Version 1.3.0-beta:
 -------------------
+- Restructured module interfaces.
 - Implemented probabilistic accuracy.
 - Fixed synchronization and visibility.
+- Improved documentation.
 - Upgraded infos to MD format.
 - BREAKING: Completely restructured.
 - BREAKING: Dropped memoization.

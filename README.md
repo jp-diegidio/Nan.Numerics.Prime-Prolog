@@ -8,6 +8,25 @@ Licensed under GNU GPLv3.
 http://julio.diegidio.name/Projects/Nan.Numerics.Primes/
 https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/
 
+**This library implements primality tests in Prolog.**  
+*This is an open and free project.*  
+Source code available and pull requests accepted.  
+
+  1. What is in this library
+  2. How to use this library
+  3. Still to be done
+
+## 1. What is in this library
+
+This library implements a variant of the **Miller-Rabin** primality test that
+is _deterministic_ for numbers up to `3317044064679887385961980`, otherwise
+it is _probabilistic_ with the number of iterations fixed at =20=.  For
+better performance, leverages a configurable prime wheel and optional
+memoization of pairs of consecutive prime numbers.
+
+*NOTE*: Since the primality test in use is _probabilistic_ in general, this
+library is not suitable for cryptographic applications.
+
 =|library(nan_numerics_primes)|=
 
 Module =prime= provides predicates to test (positive integer) numbers for

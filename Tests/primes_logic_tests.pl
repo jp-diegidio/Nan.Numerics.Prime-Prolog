@@ -40,8 +40,8 @@ Tests for module =primes_logic= (nan/numerics/primes_logic.pl).
 */
 
 :- initialization
-	use_module(loader),
-	module_path('primes_logic.pl', Path),
+	use_module(locator),
+	file_path('primes_logic.pl', Path),
 	use_module(Path).
 
 :- use_module(library(plunit)).

@@ -49,8 +49,8 @@ form =|error(primes_wheel_tests:level(Expected, Actual), _)|=.
 */
 
 :- initialization
-	use_module(loader),
-	module_path('primes_wheel.pl', Path),
+	use_module(locator),
+	file_path('primes_wheel.pl', Path),
 	use_module(Path).
 
 :- use_module(library(plunit)).

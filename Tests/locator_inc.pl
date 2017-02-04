@@ -1,3 +1,5 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 /*	Nan.Numerics.Primes
 	Nan.Numerics.Primes/Prolog 1.3.0-beta
 	A Simple Prime Number Library in Prolog
@@ -23,12 +25,11 @@
 
 % (SWI-Prolog 7.3.25)
 
-name(nan_numerics_prime).
-version('1.3.0'). % 1.3.0-beta
-title('Nan.Numerics.Primes - A Simple Prime Number Library in Prolog').
-author('Julio P. Di Egidio', 'julio@diegidio.name').
-home('http://julio.diegidio.name/Projects/Nan.Numerics.Primes/Prolog/').
-download('https://github.com/jp-diegidio/Nan.Numerics.Primes-Prolog/releases/download/1.3.0-beta/nan_numerics_primes-1.3.0.zip').
-provides(numerics).
-provides(primes).
-keywords([nan, numerics, prime, primality]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%	file_sdir(?Dir:atom) is nondet.
+
+file_sdir('../Code/').
+file_sdir('../prolog/nan/numerics/').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

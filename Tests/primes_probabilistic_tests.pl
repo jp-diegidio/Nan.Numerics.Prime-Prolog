@@ -49,8 +49,8 @@ form =|error(primes_probabilistic_tests:accuracy(Expected, Actual), _)|=.
 */
 
 :- initialization
-	use_module(loader),
-	module_path('primes_probabilistic.pl', Path),
+	use_module(locator),
+	file_path('primes_probabilistic.pl', Path),
 	use_module(Path).
 
 :- use_module(library(plunit)).
