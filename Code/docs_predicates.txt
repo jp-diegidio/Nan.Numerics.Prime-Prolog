@@ -1,0 +1,59 @@
+Code Documentation :: Predicates
+================================
+
+==
+Nan.Documentation.Code
+Nan.Documentation.Code/Prolog 1.1.0
+Code Documentation in Prolog
+Copyright 2017 Julio P. Di Egidio
+Licensed under GNU GPLv3.
+http://julio.diegidio.name/Projects/Nan.Documentation.Code/
+==
+
+Part of *|Nan.Documentation.Code|* (nan/documentation/code.pl)
+
+For code documentation, we conform to [SWI-Prolog Source Documentation
+Version 2](http://www.swi-prolog.org/pldoc/package/pldoc.html), except
+for predicate argument _instantiation_ modes and relative meanings, as
+detailed in the following section.
+
+Predicate documentation
+-----------------------
+
+The _header_ of the documentation of a predicate consists of one or more
+_templates_, each defining a specific way of calling the predicate.
+
+Here is the formal syntax of a predicate _template_:
+
+==
+<template>       ::= <head>['//'] 'is' <determinism> | <head>['//']
+<determinism>    ::= 'det' | 'semidet' | 'failure' | 'nondet' | 'multi'
+<head>           ::= <functor>'('<args>')' | <functor>
+<args>           ::= <argspec>',' <args> | <argspec>
+<argspec>        ::= [<instantiation>]<argname>[':'<type>]
+<instantiation>  ::= '+' | '-' | '?' | ':' | '@' | '!'
+<type>           ::= <term>
+==
+
+The meaning of predicate _determinism_ modes is:
+
+| *Determinism* | *Predicate behaviour* |
+| =det=     | Succeeds exactly once. |
+| =semidet= | Fails or succeeds exactly once. |
+| =failure= | Always fails. |
+| =nondet=  | Fails or succeeds one or more times. |
+| =multi=   | Succeeds one or more times. |
+
+The meaning of argument _instantiation_ modes is:
+
+| *Instantiation* | *Direction* | *Argument requirements* |
+| =|+|= | Input  | Must satisfy _type_ at call time.  May be instantiated further. |
+| =|-|= | Output | Must be =var= at call time.  Will satisfy _type_ on exit. |
+| =|?|= | Output | As =|-|= but "steadfast".  (With =nonvar= argument, =det= becomes =semidet=, etc.) |
+| =|:|= | Input  | As =|+|= but treated as a meta-argument. |
+| =|@|= | Input  | As =|+|= but not instantiated further. |
+| =|!|= | Input  | As =|+|= but may be modified destructively. |
+
+*NOTE*: The result of calling a predicate with arguments of the wrong type
+or with arguments incorrectly instantiated is _undefined_ and may include
+errors and unexpected behavior.

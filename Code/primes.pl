@@ -65,6 +65,8 @@
 
 Part of *|Nan.Numerics.Primes|* (nan/numerics/primes.pl)
 
+For predicate documentation syntax and meanings see docs_predicates.txt.
+
 This library implements a variant of the *Miller-Rabin* primality test that
 is _deterministic_ for numbers up to =3317044064679887385961980=, otherwise
 it is _probabilistic_ with the number of iterations fixed at =20=.  For
